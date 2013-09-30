@@ -197,3 +197,13 @@ DEFINE_FWK_MODULE(HLTExclDiCaloJetFilter);
 DEFINE_FWK_MODULE(HLTExclDiPFJetFilter);
 
 DEFINE_FWK_MODULE(HLTTPCaloJetsOnCaloJetsMETCleaner);
+
+
+// This should be moved to HLTrigger/HLTfilters/src/SealModule.cc in the future
+//#include "HLTrigger/HLTfilters/interface/HLTSinglet.h"
+//#include "HLTrigger/HLTfilters/src/HLTSinglet.cc"
+#include "HLTrigger/HLTfilters/interface/HLTDoublet.h"
+#include "HLTrigger/HLTfilters/src/HLTDoublet.cc"
+typedef HLTDoublet<    MET,    MET> HLT2METMET;
+DEFINE_FWK_MODULE(HLT2METMET);
+

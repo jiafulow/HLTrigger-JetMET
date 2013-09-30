@@ -35,6 +35,7 @@ HLTMinDPhiFilter::~HLTMinDPhiFilter() {}
 // Fill descriptions
 void HLTMinDPhiFilter::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
     edm::ParameterSetDescription desc;
+    desc.add<bool>("saveTags", false);
     desc.add<bool>("excludePFMuons", false);
     desc.add<int>("maxNJets", 999);
     desc.add<double>("minPt", 0.0);
@@ -47,7 +48,7 @@ void HLTMinDPhiFilter::fillDescriptions(edm::ConfigurationDescriptions& descript
 
 bool HLTMinDPhiFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) {
     // The filter object
-    //if (saveTags()) filterproduct.addCollectionTag(jetsLabel_);
+    if (saveTags()) filterproduct.addCollectionTag(jetsLabel_);
     
     edm::Handle<reco::METCollection> mets;
     iEvent.getByLabel(metLabel_, mets);

@@ -27,7 +27,7 @@ HLTTrackMETProducer::HLTTrackMETProducer(const edm::ParameterSet& iConfig)
         excludePFMuons_(iConfig.getParameter<bool>("excludePFMuons")),
         minPt_(iConfig.getParameter<double>("minPt")),
         maxEta_(iConfig.getParameter<double>("maxEta")),
-        scale_(iConfig.getParameter<bool>("scale")),
+        scale_(iConfig.getParameter<double>("scale")),
         pfCandidatesLabel_(iConfig.getParameter<edm::InputTag>("pfCandidatesLabel")),
         pfJetsLabel_(iConfig.getParameter<edm::InputTag>("pfJetsLabel")),
         pfRecTracksLabel_(iConfig.getParameter<edm::InputTag>("pfRecTracksLabel")) {

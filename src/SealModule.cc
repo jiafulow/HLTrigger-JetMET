@@ -20,6 +20,8 @@
 #include "HLTrigger/JetMET/interface/HLTNVFilter.h"
 #include "HLTrigger/JetMET/interface/HLTCaloJetIDProducer.h"
 #include "HLTrigger/JetMET/interface/HLTPFJetIDProducer.h"
+#include "HLTrigger/JetMET/interface/HLTTrackMETProducer.h"
+#include "HLTrigger/JetMET/interface/HLTMinDPhiFilter.h"
 
 //Work with all jet collections without changing the module name
 #include "HLTrigger/JetMET/interface/HLTHtMhtProducer.h"
@@ -73,6 +75,9 @@
 //
 #include "HLTrigger/JetMET/interface/HLTExclDiJetFilter.h"
 #include "HLTrigger/JetMET/src/HLTExclDiJetFilter.cc"
+//
+#include "HLTrigger/JetMET/interface/HLTTopProjectionMETCleaner.h"
+#include "HLTrigger/JetMET/src/HLTTopProjectionMETCleaner.cc"
 
 using namespace reco;
 using namespace trigger;
@@ -119,6 +124,8 @@ typedef HLTFatJetMassFilter<  PFJet> HLTFatPFJetMassFilter;
 typedef HLTExclDiJetFilter<CaloJet> HLTExclDiCaloJetFilter;
 typedef HLTExclDiJetFilter<  PFJet> HLTExclDiPFJetFilter;
 
+typedef HLTTopProjectionMETCleaner<CaloJet, CaloJet> HLTTPCaloJetsOnCaloJetsMETCleaner;
+
 //No changes
 DEFINE_FWK_MODULE(AnyJetToCaloJetProducer);
 DEFINE_FWK_MODULE(HLT2jetGapFilter);
@@ -138,6 +145,8 @@ DEFINE_FWK_MODULE(HLTHcalLaserFilter);
 DEFINE_FWK_MODULE(HLTHcalTowerNoiseCleaner);
 DEFINE_FWK_MODULE(HLTNVFilter);
 DEFINE_FWK_MODULE(PFJetsMatchedToFilteredCaloJetsProducer);
+DEFINE_FWK_MODULE(HLTTrackMETProducer);
+DEFINE_FWK_MODULE(HLTMinDPhiFilter);
 
 //Work with all jet collections without changing the module name
 DEFINE_FWK_MODULE(HLTMhtProducer);
@@ -186,3 +195,5 @@ DEFINE_FWK_MODULE(HLTFatPFJetMassFilter);
 
 DEFINE_FWK_MODULE(HLTExclDiCaloJetFilter);
 DEFINE_FWK_MODULE(HLTExclDiPFJetFilter);
+
+DEFINE_FWK_MODULE(HLTTPCaloJetsOnCaloJetsMETCleaner);

@@ -27,7 +27,6 @@ class HLTTrackMETProducer : public edm::EDProducer {
     virtual void produce(edm::Event&, const edm::EventSetup&);
     
   private:
-    /// Input tag for particle flow candidates
     bool usePt_;  // currently unused
     bool useJets_;  // currently unused
     bool useTracks_;

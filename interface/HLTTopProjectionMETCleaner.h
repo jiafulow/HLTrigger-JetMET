@@ -13,8 +13,8 @@
  *  so the top collection should be a subset of the bottom collection. It 
  *  creates a MET vector defined as:
  * 
- *    output MET = MET from top collection - MET from bottom collection
- *               = -1.0 * MET from (bottom - top) collection
+ *    output MET = input MET + MET from top collection - MET from bottom collection
+ *               = input MET - 1.0 * MET from (bottom - top) collection
  * 
  *  N.B. SpecificCaloMETData is not updated.
  * 

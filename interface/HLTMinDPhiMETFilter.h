@@ -1,7 +1,7 @@
-#ifndef HLTMinDPhiFilter_h_
-#define HLTMinDPhiFilter_h_
+#ifndef HLTMinDPhiMETFilter_h_
+#define HLTMinDPhiMETFilter_h_
 
-/** \class  HLTMinDPhiFilter
+/** \class  HLTMinDPhiMETFilter
  * 
  *  \brief  This rejects events using the minimum delta phi between a jet and MET.
  *  \author Jia Fu Low <jia.fu.low@cern.ch>
@@ -17,10 +17,10 @@
 #include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 
 // Class declaration
-class HLTMinDPhiFilter : public HLTFilter {
+class HLTMinDPhiMETFilter : public HLTFilter {
   public:
-    explicit HLTMinDPhiFilter(const edm::ParameterSet&);
-    ~HLTMinDPhiFilter();
+    explicit HLTMinDPhiMETFilter(const edm::ParameterSet&);
+    ~HLTMinDPhiMETFilter();
     static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
     virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct);
     
@@ -36,4 +36,4 @@ class HLTMinDPhiFilter : public HLTFilter {
 };
 
 
-#endif  // HLTMinDPhiFilter_h_
+#endif  // HLTMinDPhiMETFilter_h_

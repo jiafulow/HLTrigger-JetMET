@@ -21,7 +21,7 @@
 #include "HLTrigger/JetMET/interface/HLTCaloJetIDProducer.h"
 #include "HLTrigger/JetMET/interface/HLTPFJetIDProducer.h"
 #include "HLTrigger/JetMET/interface/HLTTrackMETProducer.h"
-#include "HLTrigger/JetMET/interface/HLTMinDPhiFilter.h"
+#include "HLTrigger/JetMET/interface/HLTMinDPhiMETFilter.h"
 
 //Work with all jet collections without changing the module name
 #include "HLTrigger/JetMET/interface/HLTHtMhtProducer.h"
@@ -33,6 +33,10 @@
 #include "DataFormats/JetReco/interface/CaloJetCollection.h"
 #include "DataFormats/JetReco/interface/PFJet.h"
 #include "DataFormats/JetReco/interface/PFJetCollection.h"
+#include "DataFormats/METReco/interface/CaloMET.h"
+#include "DataFormats/METReco/interface/CaloMETFwd.h"
+#include "DataFormats/METReco/interface/PFMET.h"
+#include "DataFormats/METReco/interface/PFMETFwd.h"
 //
 #include "HLTrigger/JetMET/interface/HLTAlphaTFilter.h"
 #include "HLTrigger/JetMET/src/HLTAlphaTFilter.cc"
@@ -76,8 +80,11 @@
 #include "HLTrigger/JetMET/interface/HLTExclDiJetFilter.h"
 #include "HLTrigger/JetMET/src/HLTExclDiJetFilter.cc"
 //
-#include "HLTrigger/JetMET/interface/HLTTopProjectionMETCleaner.h"
-#include "HLTrigger/JetMET/src/HLTTopProjectionMETCleaner.cc"
+//#include "HLTrigger/JetMET/interface/HLTTopProjectionMETCleaner.h"
+//#include "HLTrigger/JetMET/src/HLTTopProjectionMETCleaner.cc"
+//
+#include "HLTrigger/JetMET/interface/HLTMETCleanerUsingJetID.h"
+#include "HLTrigger/JetMET/src/HLTMETCleanerUsingJetID.cc"
 
 using namespace reco;
 using namespace trigger;
@@ -124,7 +131,10 @@ typedef HLTFatJetMassFilter<  PFJet> HLTFatPFJetMassFilter;
 typedef HLTExclDiJetFilter<CaloJet> HLTExclDiCaloJetFilter;
 typedef HLTExclDiJetFilter<  PFJet> HLTExclDiPFJetFilter;
 
-typedef HLTTopProjectionMETCleaner<CaloJet, CaloJet> HLTTPCaloJetsOnCaloJetsMETCleaner;
+//typedef HLTTopProjectionMETCleaner<CaloJet, CaloJet> HLTTPCaloJetsOnCaloJetsMETCleaner;
+
+typedef HLTMETCleanerUsingJetID<CaloMET, CaloJet> HLTCaloMETCleanerUsingJetID;
+typedef HLTMETCleanerUsingJetID<    MET,   PFJet> HLTPFMETCleanerUsingJetID;
 
 //No changes
 DEFINE_FWK_MODULE(AnyJetToCaloJetProducer);
@@ -146,7 +156,7 @@ DEFINE_FWK_MODULE(HLTHcalTowerNoiseCleaner);
 DEFINE_FWK_MODULE(HLTNVFilter);
 DEFINE_FWK_MODULE(PFJetsMatchedToFilteredCaloJetsProducer);
 DEFINE_FWK_MODULE(HLTTrackMETProducer);
-DEFINE_FWK_MODULE(HLTMinDPhiFilter);
+DEFINE_FWK_MODULE(HLTMinDPhiMETFilter);
 
 //Work with all jet collections without changing the module name
 DEFINE_FWK_MODULE(HLTMhtProducer);
@@ -196,8 +206,10 @@ DEFINE_FWK_MODULE(HLTFatPFJetMassFilter);
 DEFINE_FWK_MODULE(HLTExclDiCaloJetFilter);
 DEFINE_FWK_MODULE(HLTExclDiPFJetFilter);
 
-DEFINE_FWK_MODULE(HLTTPCaloJetsOnCaloJetsMETCleaner);
+//DEFINE_FWK_MODULE(HLTTPCaloJetsOnCaloJetsMETCleaner);
 
+DEFINE_FWK_MODULE(HLTCaloMETCleanerUsingJetID);
+DEFINE_FWK_MODULE(HLTPFMETCleanerUsingJetID);
 
 // This should be moved to HLTrigger/HLTfilters/src/SealModule.cc in the future
 //#include "HLTrigger/HLTfilters/interface/HLTSinglet.h"

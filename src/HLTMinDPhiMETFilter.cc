@@ -1,4 +1,4 @@
-/** \class  HLTMinDPhiFilter
+/** \class  HLTMinDPhiMETFilter
  * 
  *  \author Jia Fu Low <jia.fu.low@cern.ch>
  * 
@@ -6,7 +6,7 @@
  * 
  */
 
-#include "HLTrigger/JetMET/interface/HLTMinDPhiFilter.h"
+#include "HLTrigger/JetMET/interface/HLTMinDPhiMETFilter.h"
 
 //#include "DataFormats/HLTReco/interface/TriggerTypeDefs.h"
 #include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
@@ -18,7 +18,7 @@
 
 
 // Constructor
-HLTMinDPhiFilter::HLTMinDPhiFilter(const edm::ParameterSet& iConfig) 
+HLTMinDPhiMETFilter::HLTMinDPhiMETFilter(const edm::ParameterSet& iConfig) 
       : HLTFilter(iConfig),
         excludePFMuons_(iConfig.getParameter<bool>("excludePFMuons")),
         maxNJets_(iConfig.getParameter<int>("maxNJets")),
@@ -30,10 +30,10 @@ HLTMinDPhiFilter::HLTMinDPhiFilter(const edm::ParameterSet& iConfig)
 }
 
 // Destructor
-HLTMinDPhiFilter::~HLTMinDPhiFilter() {}
+HLTMinDPhiMETFilter::~HLTMinDPhiMETFilter() {}
 
 // Fill descriptions
-void HLTMinDPhiFilter::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+void HLTMinDPhiMETFilter::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
     edm::ParameterSetDescription desc;
     desc.add<bool>("saveTags", false);
     desc.add<bool>("excludePFMuons", false);
@@ -46,7 +46,7 @@ void HLTMinDPhiFilter::fillDescriptions(edm::ConfigurationDescriptions& descript
     descriptions.add("hltMinDPhiFilter",desc);
 }
 
-bool HLTMinDPhiFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) {
+bool HLTMinDPhiMETFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) {
     // The filter object
     if (saveTags()) filterproduct.addCollectionTag(jetsLabel_);
     

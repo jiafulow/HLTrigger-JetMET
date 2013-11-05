@@ -95,7 +95,8 @@ void HLTMETCleanerUsingJetID<T, J>::produce(edm::Event& iEvent, const edm::Event
         double mex_diff = mex_goodJets - mex_jets;
         double mey_diff = mey_goodJets - mey_jets;
         double sumet_diff = sumet_goodJets - sumet_jets;
-        assert(sumet_diff < 0);  // FIXME: remove this
+        if (sumet_diff > 0)  std::cout << sumet_diff << std::endl;  // FIXME: remove this
+        assert(sumet_diff <= 0.);  // FIXME: remove this
         reco::Candidate::LorentzVector p4_diff(mex_diff, mey_diff, 0, sqrt(mex_diff*mex_diff + mey_diff*mey_diff));
 
         T cleanmet = met->front();

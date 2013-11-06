@@ -23,13 +23,13 @@ class HLTMhtProducer : public edm::EDProducer {
       ~HLTMhtProducer();
       static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
       virtual void produce(edm::Event&, const edm::EventSetup&);
-      
+
  private:
       edm::InputTag inputJetTag_; // input tag identifying jets
       double minPtJet_;
       double etaJet_;
       bool usePt_;
-      
+
 };
 
-#endif //HLTMhtProducer_h
+#endif  // HLTMhtProducer_h

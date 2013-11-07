@@ -9,6 +9,8 @@
 #include "HLTrigger/JetMET/interface/HLTTrackMETProducer.h"
 
 #include <vector>
+#include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
+#include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/METReco/interface/MET.h"
@@ -61,7 +63,7 @@ void HLTTrackMETProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSe
     using namespace edm;
     using namespace reco;
     
-    std::auto_ptr<reco::METCollection> result(new reco::METCollection); 
+    std::auto_ptr<reco::METCollection> result(new reco::METCollection()); 
     
     edm::Handle<reco::PFRecTrackCollection> pfRecTracks;
     edm::Handle<reco::PFCandidateCollection> pfCandidates;

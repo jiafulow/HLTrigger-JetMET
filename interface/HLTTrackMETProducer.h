@@ -14,9 +14,12 @@
 #include "FWCore/Framework/interface/EDProducer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
-#include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+
+namespace edm {
+   class ConfigurationDescriptions;
+}
 
 // Class declaration
 class HLTTrackMETProducer : public edm::EDProducer {

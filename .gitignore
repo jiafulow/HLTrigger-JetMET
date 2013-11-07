@@ -15,3 +15,6 @@
 # Compiled python bytecode
 *.py[cod]
 __init__.py
+
+# Backup
+*~

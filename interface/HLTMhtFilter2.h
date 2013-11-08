@@ -22,14 +22,12 @@ namespace edm {
 // Class declaration
 class HLTMhtFilter2 : public HLTFilter {
   public:
-
     explicit HLTMhtFilter2(const edm::ParameterSet & iConfig);
     ~HLTMhtFilter2();
     static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
     virtual bool hltFilter(edm::Event & iEvent, const edm::EventSetup & iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct);
 
   private:
-
     /// Minimum MHT requirements
     std::vector<double> minMht_;
 
@@ -41,3 +39,4 @@ class HLTMhtFilter2 : public HLTFilter {
 };
 
 #endif  // HLTMhtFilter2_h_
+

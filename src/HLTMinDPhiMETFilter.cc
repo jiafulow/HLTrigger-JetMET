@@ -18,15 +18,14 @@
 
 
 // Constructor
-HLTMinDPhiMETFilter::HLTMinDPhiMETFilter(const edm::ParameterSet& iConfig) 
-      : HLTFilter(iConfig),
-        excludePFMuons_(iConfig.getParameter<bool>("excludePFMuons")),
-        maxNJets_(iConfig.getParameter<int>("maxNJets")),
-        minPt_(iConfig.getParameter<double>("minPt")),
-        maxEta_(iConfig.getParameter<double>("maxEta")),
-        minDPhi_(iConfig.getParameter<double>("minDPhi")),
-        metLabel_(iConfig.getParameter<edm::InputTag>("metLabel")),
-        jetsLabel_(iConfig.getParameter<edm::InputTag>("jetsLabel")) {
+HLTMinDPhiMETFilter::HLTMinDPhiMETFilter(const edm::ParameterSet& iConfig) : HLTFilter(iConfig),
+  excludePFMuons_(iConfig.getParameter<bool>("excludePFMuons")),
+  maxNJets_      (iConfig.getParameter<int>("maxNJets")),
+  minPt_         (iConfig.getParameter<double>("minPt")),
+  maxEta_        (iConfig.getParameter<double>("maxEta")),
+  minDPhi_       (iConfig.getParameter<double>("minDPhi")),
+  metLabel_      (iConfig.getParameter<edm::InputTag>("metLabel")),
+  jetsLabel_     (iConfig.getParameter<edm::InputTag>("jetsLabel")) {
 }
 
 // Destructor
@@ -81,3 +80,4 @@ bool HLTMinDPhiMETFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& i
     
     return accept;
 }
+

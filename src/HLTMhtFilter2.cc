@@ -45,7 +45,7 @@ void HLTMhtFilter2::fillDescriptions(edm::ConfigurationDescriptions & descriptio
     desc.add<bool>("saveTags", false);
     desc.add<std::vector<edm::InputTag> >("mhtLabels", tmp1);
     tmp2[0] =  70; desc.add<std::vector<double> >("minMht", tmp2);
-    descriptions.add("hltMhtFilter", desc);
+    descriptions.add("hltMhtFilter2", desc);
 }
 
 // Make filter decision

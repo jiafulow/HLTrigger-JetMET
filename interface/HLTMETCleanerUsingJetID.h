@@ -49,5 +49,5 @@ class HLTMETCleanerUsingJetID : public edm::EDProducer {
     edm::InputTag   goodJetsLabel_;
 };
 
-
 #endif  // HLTMETCleanerUsingJetID_h_
+

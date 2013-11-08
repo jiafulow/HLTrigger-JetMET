@@ -13,13 +13,13 @@
 // Constructor
 template<class T, class J>
 HLTMETCleanerUsingJetID<T, J>::HLTMETCleanerUsingJetID(const edm::ParameterSet& iConfig)
-      : usePt_(iConfig.getParameter<bool>("usePt")),
+      : usePt_         (iConfig.getParameter<bool>("usePt")),
         excludePFMuons_(iConfig.getParameter<bool>("excludePFMuons")),
-        minPt_(iConfig.getParameter<double>("minPt")),
-        maxEta_(iConfig.getParameter<double>("maxEta")),
-        metLabel_(iConfig.getParameter<edm::InputTag>("metLabel")),
-        jetsLabel_(iConfig.getParameter<edm::InputTag>("jetsLabel")),
-        goodJetsLabel_(iConfig.getParameter<edm::InputTag>("goodJetsLabel")) {
+        minPt_         (iConfig.getParameter<double>("minPt")),
+        maxEta_        (iConfig.getParameter<double>("maxEta")),
+        metLabel_      (iConfig.getParameter<edm::InputTag>("metLabel")),
+        jetsLabel_     (iConfig.getParameter<edm::InputTag>("jetsLabel")),
+        goodJetsLabel_ (iConfig.getParameter<edm::InputTag>("goodJetsLabel")) {
     // Register your products
     produces<std::vector<T> > ();
 
@@ -106,3 +106,4 @@ void HLTMETCleanerUsingJetID<T, J>::produce(edm::Event& iEvent, const edm::Event
 
     iEvent.put( result );
 }
+

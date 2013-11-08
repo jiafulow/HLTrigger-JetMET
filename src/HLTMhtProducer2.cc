@@ -60,7 +60,7 @@ void HLTMhtProducer2::fillDescriptions(edm::ConfigurationDescriptions & descript
     desc.add<edm::InputTag>("tracksLabel",  edm::InputTag(""));  // set to hltL3Muons?
     desc.add<edm::InputTag>("pfRecTracksLabel",  edm::InputTag(""));  // set to hltLightPFTracks?
     desc.add<edm::InputTag>("pfCandidatesLabel",  edm::InputTag(""));  // set to hltParticleFlow?
-    descriptions.add("hltMhtProducer", desc);
+    descriptions.add("hltMhtProducer2", desc);
 }
 
 // Produce the products

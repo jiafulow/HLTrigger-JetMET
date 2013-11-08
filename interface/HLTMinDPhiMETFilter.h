@@ -13,6 +13,7 @@
  * 
  */
 
+
 #include "HLTrigger/HLTcore/interface/HLTFilter.h"
 #include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 
@@ -35,5 +36,5 @@ class HLTMinDPhiMETFilter : public HLTFilter {
     edm::InputTag jetsLabel_;
 };
 
-
 #endif  // HLTMinDPhiMETFilter_h_
+

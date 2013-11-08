@@ -61,7 +61,7 @@ void HLTHtMhtFilter2::fillDescriptions(edm::ConfigurationDescriptions & descript
     tmp2[0] =  70; desc.add<std::vector<double> >("minMht",    tmp2);
     tmp2[0] =   0; desc.add<std::vector<double> >("minMeff",   tmp2);
     tmp2[0] =   1; desc.add<std::vector<double> >("meffSlope", tmp2);
-    descriptions.add("hltHtMhtFilter", desc);
+    descriptions.add("hltHtMhtFilter2", desc);
 }
 
 // Make filter decision

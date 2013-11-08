@@ -42,5 +42,5 @@ class HLTTrackMETProducer : public edm::EDProducer {
     edm::InputTag pfRecTracksLabel_;
 };
 
-
 #endif  //HLTTrackMETProducer_h_
+

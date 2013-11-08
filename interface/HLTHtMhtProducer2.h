@@ -30,14 +30,12 @@ namespace edm {
 // Class declaration
 class HLTHtMhtProducer2 : public edm::EDProducer {
   public:
-
     explicit HLTHtMhtProducer2(const edm::ParameterSet & iConfig);
     ~HLTHtMhtProducer2();
     static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
     virtual void produce(edm::Event & iEvent, const edm::EventSetup & iSetup);
 
   private:
-
     /// Use pt; otherwise, use et.
     /// Ignored if jets are not used as input.
     bool usePt_;
@@ -82,3 +80,4 @@ class HLTHtMhtProducer2 : public edm::EDProducer {
 };
 
 #endif  // HLTHtMhtProducer2_h_
+

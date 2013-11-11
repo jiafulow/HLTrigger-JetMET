@@ -42,7 +42,7 @@ class HLTCaloJetIDProducer2 : public edm::EDProducer {
     int min_N90hits_;                 ///< mininum N90hits
     double min_EMF_;                  ///< minimum EMF
     double max_EMF_;                  ///< maximum EMF
-    edm::InputTag input_;             ///< input calo jet collection
+    edm::InputTag inputTag_;          ///< input calo jet collection
     edm::ParameterSet jetIDParams_;   ///< calo jet ID parameters
 
     /// A helper to calculates calo jet ID variables.

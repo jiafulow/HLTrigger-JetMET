@@ -19,14 +19,14 @@
 
 // Constructor
 HLTPFJetIDProducer2::HLTPFJetIDProducer2(const edm::ParameterSet& iConfig) :
-  minPt_(iConfig.getParameter<double>("minPt")),
-  CHF_  (iConfig.getParameter<double>("CHF")),
-  NHF_  (iConfig.getParameter<double>("NHF")),
-  CEF_  (iConfig.getParameter<double>("CEF")),
-  NEF_  (iConfig.getParameter<double>("NEF")),
-  NCH_  (iConfig.getParameter<int>("NCH")),
-  NTOT_ (iConfig.getParameter<int>("NTOT")),
-  input_(iConfig.getParameter<edm::InputTag>("input")) {
+  minPt_    (iConfig.getParameter<double>("minPt")),
+  CHF_      (iConfig.getParameter<double>("CHF")),
+  NHF_      (iConfig.getParameter<double>("NHF")),
+  CEF_      (iConfig.getParameter<double>("CEF")),
+  NEF_      (iConfig.getParameter<double>("NEF")),
+  NCH_      (iConfig.getParameter<int>("NCH")),
+  NTOT_     (iConfig.getParameter<int>("NTOT")),
+  inputTag_ (iConfig.getParameter<edm::InputTag>("inputTag")) {
 
     // Register the products
     produces<reco::PFJetCollection>();
@@ -56,7 +56,7 @@ void HLTPFJetIDProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSe
     std::auto_ptr<reco::PFJetCollection> result (new reco::PFJetCollection());
 
     edm::Handle<reco::PFJetCollection> pfjets;
-    iEvent.getByLabel(input_, pfjets);
+    iEvent.getByLabel(inputTag_, pfjets);
 
     for (reco::PFJetCollection::const_iterator j = pfjets->begin(); j != pfjets->end(); ++j) {
         bool pass = false;

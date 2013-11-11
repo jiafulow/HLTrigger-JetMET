@@ -31,10 +31,6 @@ class HLTMinDPhiMETFilter : public HLTFilter {
     static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
     virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct);
 
-    static bool returnHigherPt(const TRef& lhs, const TRef& rhs) {
-        return (lhs->pt() > rhs->pt());
-    }
-
   private:
     /// Use pt; otherwise, use et.
     bool usePt_;

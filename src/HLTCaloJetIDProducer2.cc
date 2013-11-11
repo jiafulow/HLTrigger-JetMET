@@ -23,7 +23,7 @@ HLTCaloJetIDProducer2::HLTCaloJetIDProducer2(const edm::ParameterSet& iConfig) :
   min_N90hits_(iConfig.getParameter<int>("min_N90hits")),
   min_EMF_    (iConfig.getParameter<double>("min_EMF")),
   max_EMF_    (iConfig.getParameter<double>("max_EMF")),
-  input_      (iConfig.getParameter<edm::InputTag>("input")),
+  inputTag_   (iConfig.getParameter<edm::InputTag>("inputTag")),
   jetIDParams_(iConfig.getParameter<edm::ParameterSet>("JetIDParams")),
   jetIDHelper_(jetIDParams_) {
 
@@ -62,7 +62,7 @@ void HLTCaloJetIDProducer2::produce(edm::Event& iEvent, const edm::EventSetup& i
     std::auto_ptr<reco::CaloJetCollection> result (new reco::CaloJetCollection());
 
     edm::Handle<reco::CaloJetCollection> calojets;
-    iEvent.getByLabel(input_, calojets);
+    iEvent.getByLabel(inputTag_, calojets);
 
     for (reco::CaloJetCollection::const_iterator j = calojets->begin(); j != calojets->end(); ++j) {
         bool pass = false;

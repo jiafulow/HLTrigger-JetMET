@@ -30,13 +30,13 @@ class HLTPFJetIDProducer2 : public edm::EDProducer {
 
   private:
     double minPt_;
-    double CHF_;            ///< charged hadron fraction
-    double NHF_;            ///< neutral hadron fraction
-    double CEF_;            ///< charged EM fraction
-    double NEF_;            ///< neutral EM fraction
-    int NCH_;               ///< number of charged constituents
-    int NTOT_;              ///< number of constituents
-    edm::InputTag input_;   ///< input PF jet collection
+    double CHF_;              ///< charged hadron fraction
+    double NHF_;              ///< neutral hadron fraction
+    double CEF_;              ///< charged EM fraction
+    double NEF_;              ///< neutral EM fraction
+    int NCH_;                 ///< number of charged constituents
+    int NTOT_;                ///< number of constituents
+    edm::InputTag inputTag_;  ///< input PF jet collection
 };
 
 #endif  // HLTPFJetIDProducer2_h_

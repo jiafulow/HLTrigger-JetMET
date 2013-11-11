@@ -14,6 +14,7 @@
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/Common/interface/View.h"
 #include "DataFormats/JetReco/interface/Jet.h"
+#include "DataFormats/JetReco/interface/JetCollection.h"
 #include "DataFormats/METReco/interface/MET.h"
 #include "DataFormats/METReco/interface/METFwd.h"
 #include "DataFormats/TrackReco/interface/Track.h"
@@ -86,7 +87,7 @@ void HLTHtMhtProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
         minNJetMht_ = 0;
     }
 
-    edm::Handle<edm::View<reco::Jet> > jets;
+    edm::Handle<reco::JetView> jets;
     if (useJets) iEvent.getByLabel(jetsLabel_, jets);
 
     edm::Handle<reco::TrackCollection> tracks;
@@ -103,7 +104,7 @@ void HLTHtMhtProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     double ht = 0., mhx = 0., mhy = 0.;
 
     if (useJets && jets->size() > 0) {
-        for(edm::View<reco::Jet>::const_iterator j = jets->begin(); j != jets->end(); ++j) {
+        for(reco::JetView::const_iterator j = jets->begin(); j != jets->end(); ++j) {
             double pt = usePt_ ? j->pt() : j->et();
             double eta = j->eta();
             double phi = j->phi();

@@ -25,7 +25,6 @@
 #include "HLTrigger/JetMET/interface/HLTPFJetIDProducer.h"
 #include "HLTrigger/JetMET/interface/HLTPFJetIDProducer2.h"
 #include "HLTrigger/JetMET/interface/HLTTrackMETProducer.h"
-#include "HLTrigger/JetMET/interface/HLTMinDPhiMETFilter.h"
 
 //Work with all jet collections without changing the module name
 #include "HLTrigger/JetMET/interface/HLTHtMhtProducer.h"
@@ -91,6 +90,12 @@
 //
 #include "HLTrigger/JetMET/interface/HLTMETCleanerUsingJetID.h"
 #include "HLTrigger/JetMET/src/HLTMETCleanerUsingJetID.cc"
+//
+#include "HLTrigger/JetMET/interface/HLTJetVBFFilter2.h"
+#include "HLTrigger/JetMET/src/HLTJetVBFFilter2.cc"
+//
+#include "HLTrigger/JetMET/interface/HLTMinDPhiMETFilter.h"
+#include "HLTrigger/JetMET/src/HLTMinDPhiMETFilter.cc"
 
 using namespace reco;
 using namespace trigger;
@@ -142,6 +147,13 @@ typedef HLTExclDiJetFilter<  PFJet> HLTExclDiPFJetFilter;
 typedef HLTMETCleanerUsingJetID<CaloMET, CaloJet> HLTCaloMETCleanerUsingJetID;
 typedef HLTMETCleanerUsingJetID<    MET,   PFJet> HLTPFMETCleanerUsingJetID;
 
+typedef HLTJetVBFFilter2<CaloJet> HLTCaloJetVBFFilter2;
+typedef HLTJetVBFFilter2<  PFJet> HLTPFJetVBFFilter2;
+
+typedef HLTMinDPhiMETFilter<CaloJet> HLTCaloJetMinDPhiMETFilter;
+typedef HLTMinDPhiMETFilter<  PFJet> HLTPFJetMinDPhiMETFilter;
+
+
 //No changes
 DEFINE_FWK_MODULE(AnyJetToCaloJetProducer);
 DEFINE_FWK_MODULE(HLT2jetGapFilter);
@@ -166,7 +178,6 @@ DEFINE_FWK_MODULE(HLTHcalTowerNoiseCleaner);
 DEFINE_FWK_MODULE(HLTNVFilter);
 DEFINE_FWK_MODULE(PFJetsMatchedToFilteredCaloJetsProducer);
 DEFINE_FWK_MODULE(HLTTrackMETProducer);
-DEFINE_FWK_MODULE(HLTMinDPhiMETFilter);
 
 //Work with all jet collections without changing the module name
 DEFINE_FWK_MODULE(HLTMhtProducer);
@@ -222,6 +233,12 @@ DEFINE_FWK_MODULE(HLTExclDiPFJetFilter);
 
 DEFINE_FWK_MODULE(HLTCaloMETCleanerUsingJetID);
 DEFINE_FWK_MODULE(HLTPFMETCleanerUsingJetID);
+
+DEFINE_FWK_MODULE(HLTCaloJetVBFFilter2);
+DEFINE_FWK_MODULE(HLTPFJetVBFFilter2);
+
+DEFINE_FWK_MODULE(HLTCaloJetMinDPhiMETFilter);
+DEFINE_FWK_MODULE(HLTPFJetMinDPhiMETFilter);
 
 // This should be moved to HLTrigger/HLTfilters/src/SealModule.cc in the future
 //#include "HLTrigger/HLTfilters/interface/HLTSinglet.h"

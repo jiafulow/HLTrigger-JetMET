@@ -63,6 +63,8 @@ void HLTPFJetIDProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSe
         double pt = j->pt();
         double eta = j->eta();
 
+        if (!(pt > 0.))  continue;  // skip jets with zero or negative pt
+
         if (pt < minPt_) {
             pass = true;
 

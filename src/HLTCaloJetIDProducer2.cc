@@ -67,6 +67,8 @@ void HLTCaloJetIDProducer2::produce(edm::Event& iEvent, const edm::EventSetup& i
     for (reco::CaloJetCollection::const_iterator j = calojets->begin(); j != calojets->end(); ++j) {
         bool pass = false;
 
+        if (!(j->energy() > 0.))  continue;  // skip jets with zero or negative energy
+
         if (std::abs(j->eta()) > 2.6) {
             pass = true;
 

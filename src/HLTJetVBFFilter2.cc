@@ -76,7 +76,7 @@ bool HLTJetVBFFilter2<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& i
         int countJet1 = 0;
         int countJet2 = 0;
         for (typename TCollection::const_iterator j1 = jets->begin(); j1 != jets->end(); ++j1) {
-            countJet1++;
+            ++countJet1;
             double ptj1 = j1->pt();
             double etaj1 = j1->eta();
 
@@ -86,7 +86,7 @@ bool HLTJetVBFFilter2<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& i
 
             countJet2 = countJet1-1;
             for (typename TCollection::const_iterator j2 = j1+1; j2 != jets->end(); ++j2) {
-                countJet2++;
+                ++countJet2;
                 double ptj2 = j2->pt();
                 double etaj2 = j2->eta();
 

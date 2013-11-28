@@ -53,7 +53,7 @@ HLTHtMhtProducer2::~HLTHtMhtProducer2() {}
 // Fill descriptions
 void HLTHtMhtProducer2::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
     edm::ParameterSetDescription desc;
-    desc.add<bool>("usePt", true);
+    desc.add<bool>("usePt", false);
     desc.add<bool>("useTracks", false);
     desc.add<bool>("usePFRecTracks", false);
     desc.add<bool>("usePFCandidatesCharged", false);
@@ -61,10 +61,10 @@ void HLTHtMhtProducer2::fillDescriptions(edm::ConfigurationDescriptions & descri
     desc.add<bool>("excludePFMuons", false);
     desc.add<int>("minNJetHt", 0);
     desc.add<int>("minNJetMht", 0);
-    desc.add<double>("minPtJetHt", 40);
-    desc.add<double>("minPtJetMht", 30);
-    desc.add<double>("maxEtaJetHt", 3);
-    desc.add<double>("maxEtaJetMht", 999);
+    desc.add<double>("minPtJetHt", 40.);
+    desc.add<double>("minPtJetMht", 30.);
+    desc.add<double>("maxEtaJetHt", 3.);
+    desc.add<double>("maxEtaJetMht", 5.);
     desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltCaloJetCorrected"));
     desc.add<edm::InputTag>("tracksLabel",  edm::InputTag(""));  // set to hltL3Muons?
     desc.add<edm::InputTag>("pfRecTracksLabel",  edm::InputTag(""));  // set to hltLightPFTracks?

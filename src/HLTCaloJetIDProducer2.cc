@@ -41,7 +41,7 @@ void HLTCaloJetIDProducer2::fillDescriptions(edm::ConfigurationDescriptions & de
     desc.add<int>("min_N90hits", 2);
     desc.add<double>("min_EMF", 1e-6);
     desc.add<double>("max_EMF", 999.);
-    desc.add<edm::InputTag>("input", edm::InputTag("hltAntiKT5CaloJets"));
+    desc.add<edm::InputTag>("inputTag", edm::InputTag("hltAntiKT5CaloJets"));
 
     edm::ParameterSetDescription descNested;
     descNested.add<bool>("useRecHits", true);
@@ -50,7 +50,7 @@ void HLTCaloJetIDProducer2::fillDescriptions(edm::ConfigurationDescriptions & de
     descNested.add<edm::InputTag>("hfRecHitsColl", edm::InputTag("hltHfreco"));
     descNested.add<edm::InputTag>("ebRecHitsColl", edm::InputTag("hltEcalRecHitAll","EcalRecHitsEB"));
     descNested.add<edm::InputTag>("eeRecHitsColl", edm::InputTag("hltEcalRecHitAll","EcalRecHitsEE"));
-    desc.add<edm::ParameterSetDescription>("jetIDParams", descNested);
+    desc.add<edm::ParameterSetDescription>("JetIDParams", descNested);
 
     descriptions.add("hltCaloJetIDProducer2", desc);
 }

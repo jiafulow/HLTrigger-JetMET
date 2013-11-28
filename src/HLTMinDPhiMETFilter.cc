@@ -14,6 +14,8 @@
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 //#include "DataFormats/HLTReco/interface/TriggerTypeDefs.h"
 //#include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
+#include "DataFormats/METReco/interface/CaloMET.h"
+#include "DataFormats/METReco/interface/CaloMETFwd.h"
 #include "DataFormats/METReco/interface/MET.h"
 #include "DataFormats/METReco/interface/METFwd.h"
 #include "DataFormats/JetReco/interface/Jet.h"
@@ -32,6 +34,7 @@ HLTMinDPhiMETFilter<T>::HLTMinDPhiMETFilter(const edm::ParameterSet& iConfig) : 
   maxEta_         (iConfig.getParameter<double>("maxEta")),
   minDPhi_        (iConfig.getParameter<double>("minDPhi")),
   metLabel_       (iConfig.getParameter<edm::InputTag>("metLabel")),
+  calometLabel_   (iConfig.getParameter<edm::InputTag>("calometLabel")),
   jetsLabel_      (iConfig.getParameter<edm::InputTag>("jetsLabel")) {
 }
 
@@ -52,6 +55,7 @@ void HLTMinDPhiMETFilter<T>::fillDescriptions(edm::ConfigurationDescriptions& de
     desc.add<double>("maxEta", 9999.0);
     desc.add<double>("minDPhi", 0.5);
     desc.add<edm::InputTag>("metLabel", edm::InputTag("hltPFMETProducer"));
+    desc.add<edm::InputTag>("calometLabel", edm::InputTag(""));
     desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltAK5PFJetL1FastL2L3Corrected"));
     descriptions.add(std::string("hlt")+std::string(typeid(HLTMinDPhiMETFilter<T>).name()), desc);
 }
@@ -63,8 +67,15 @@ bool HLTMinDPhiMETFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup
     // The filter object
     if (saveTags()) filterproduct.addCollectionTag(jetsLabel_);
 
+    bool usePFMET = (metLabel_.label() != "") || (calometLabel_.label() == "");
+
     edm::Handle<reco::METCollection> mets;
-    iEvent.getByLabel(metLabel_, mets);
+    edm::Handle<reco::CaloMETCollection> calomets;
+    if (usePFMET) {
+        iEvent.getByLabel(metLabel_, mets);
+    } else {
+        iEvent.getByLabel(calometLabel_, calomets);
+    }
 
     edm::Handle<TCollection> jets;  // assume to be sorted by pT
     iEvent.getByLabel(jetsLabel_, jets);
@@ -72,8 +83,9 @@ bool HLTMinDPhiMETFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup
     double minDPhi = 9999.;
     int nJets = 0;  // nJets counts all jets in the events, not only those that pass pt, eta requirements
 
-    if (mets->size() > 0 && jets->size() > 0) {
-        const reco::MET& met = mets->at(0);
+    if (jets->size() > 0 && 
+        ((usePFMET ? mets->size() : calomets->size()) > 0) ) {
+        double metphi = usePFMET ? mets->front().phi() : calomets->front().phi();
         for (typename TCollection::const_iterator j = jets->begin(); j != jets->end(); ++j) {
             if (nJets >= maxNJets_)
                 break;
@@ -82,7 +94,7 @@ bool HLTMinDPhiMETFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup
             double eta = j->eta();
             double phi = j->phi();
             if (pt > minPt_ && std::abs(eta) < maxEta_) {
-                double dPhi = std::abs(reco::deltaPhi(met.phi(), phi));
+                double dPhi = std::abs(reco::deltaPhi(metphi, phi));
                 if (minDPhi > dPhi) {
                     minDPhi = dPhi;
                 }
@@ -91,7 +103,7 @@ bool HLTMinDPhiMETFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup
                 filterproduct.addObject(triggerType_, ref);
             }
 
-            nJets++;
+            ++nJets;
         }
     }
 

@@ -54,6 +54,7 @@ class HLTMinDPhiMETFilter : public HLTFilter {
 
     /// Input jet, MET collections
     edm::InputTag metLabel_;
+    edm::InputTag calometLabel_;  // only used if metLabel_ is empty
     edm::InputTag jetsLabel_;
 };
 

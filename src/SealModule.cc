@@ -31,6 +31,7 @@
 #include "HLTrigger/JetMET/interface/HLTHtMhtProducer2.h"
 #include "HLTrigger/JetMET/interface/HLTMhtProducer.h"
 #include "HLTrigger/JetMET/interface/HLTMhtProducer2.h"
+#include "HLTrigger/JetMET/interface/HLTMinDPhiMETFilter.h"
 
 //Template
 #include "DataFormats/HLTReco/interface/TriggerTypeDefs.h"
@@ -93,9 +94,6 @@
 //
 #include "HLTrigger/JetMET/interface/HLTJetVBFFilter2.h"
 #include "HLTrigger/JetMET/src/HLTJetVBFFilter2.cc"
-//
-#include "HLTrigger/JetMET/interface/HLTMinDPhiMETFilter.h"
-#include "HLTrigger/JetMET/src/HLTMinDPhiMETFilter.cc"
 
 using namespace reco;
 using namespace trigger;
@@ -150,9 +148,6 @@ typedef HLTMETCleanerUsingJetID<    MET,   PFJet> HLTPFMETCleanerUsingJetID;
 typedef HLTJetVBFFilter2<CaloJet> HLTCaloJetVBFFilter2;
 typedef HLTJetVBFFilter2<  PFJet> HLTPFJetVBFFilter2;
 
-typedef HLTMinDPhiMETFilter<CaloJet> HLTCaloJetMinDPhiMETFilter;
-typedef HLTMinDPhiMETFilter<  PFJet> HLTPFJetMinDPhiMETFilter;
-
 
 //No changes
 DEFINE_FWK_MODULE(AnyJetToCaloJetProducer);
@@ -184,6 +179,7 @@ DEFINE_FWK_MODULE(HLTMhtProducer);
 DEFINE_FWK_MODULE(HLTMhtProducer2);
 DEFINE_FWK_MODULE(HLTHtMhtProducer);
 DEFINE_FWK_MODULE(HLTHtMhtProducer2);
+DEFINE_FWK_MODULE(HLTMinDPhiMETFilter);
 
 //Templates
 
@@ -236,9 +232,6 @@ DEFINE_FWK_MODULE(HLTPFMETCleanerUsingJetID);
 
 DEFINE_FWK_MODULE(HLTCaloJetVBFFilter2);
 DEFINE_FWK_MODULE(HLTPFJetVBFFilter2);
-
-DEFINE_FWK_MODULE(HLTCaloJetMinDPhiMETFilter);
-DEFINE_FWK_MODULE(HLTPFJetMinDPhiMETFilter);
 
 // This should be moved to HLTrigger/HLTfilters/src/SealModule.cc in the future
 //#include "HLTrigger/HLTfilters/interface/HLTSinglet.h"

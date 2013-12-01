@@ -24,8 +24,7 @@
 
 
 // Constructor
-template<typename T>
-HLTMinDPhiMETFilter<T>::HLTMinDPhiMETFilter(const edm::ParameterSet& iConfig) : HLTFilter(iConfig),
+HLTMinDPhiMETFilter::HLTMinDPhiMETFilter(const edm::ParameterSet& iConfig) : HLTFilter(iConfig),
   usePt_          (iConfig.getParameter<bool>("usePt")),
   //excludePFMuons_ (iConfig.getParameter<bool>("excludePFMuons")),
   triggerType_    (iConfig.getParameter<int>("triggerType")),
@@ -39,14 +38,13 @@ HLTMinDPhiMETFilter<T>::HLTMinDPhiMETFilter(const edm::ParameterSet& iConfig) : 
 }
 
 // Destructor
-template<typename T>
-HLTMinDPhiMETFilter<T>::~HLTMinDPhiMETFilter() {}
+HLTMinDPhiMETFilter::~HLTMinDPhiMETFilter() {}
 
 // Fill descriptions
-template<typename T>
-void HLTMinDPhiMETFilter<T>::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+void HLTMinDPhiMETFilter::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
     edm::ParameterSetDescription desc;
-    makeHLTFilterDescription(desc);
+    //makeHLTFilterDescription(desc);
+    desc.add<bool>("saveTags", false);
     desc.add<bool>("usePt", true);
     //desc.add<bool>("excludePFMuons", false);
     desc.add<int>("triggerType", trigger::TriggerJet);
@@ -57,12 +55,11 @@ void HLTMinDPhiMETFilter<T>::fillDescriptions(edm::ConfigurationDescriptions& de
     desc.add<edm::InputTag>("metLabel", edm::InputTag("hltPFMETProducer"));
     desc.add<edm::InputTag>("calometLabel", edm::InputTag(""));
     desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltAK5PFJetL1FastL2L3Corrected"));
-    descriptions.add(std::string("hlt")+std::string(typeid(HLTMinDPhiMETFilter<T>).name()), desc);
+    descriptions.add("hltMinDPhiMETFilter", desc);
 }
 
 // Make filter decision
-template<typename T>
-bool HLTMinDPhiMETFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) {
+bool HLTMinDPhiMETFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) {
 
     // The filter object
     if (saveTags()) filterproduct.addCollectionTag(jetsLabel_);
@@ -77,16 +74,16 @@ bool HLTMinDPhiMETFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup
         iEvent.getByLabel(calometLabel_, calomets);
     }
 
-    edm::Handle<TCollection> jets;  // assume to be sorted by pT
+    edm::Handle<reco::JetView> jets;  // assume to be sorted by pT
     iEvent.getByLabel(jetsLabel_, jets);
 
     double minDPhi = 9999.;
     int nJets = 0;  // nJets counts all jets in the events, not only those that pass pt, eta requirements
 
-    if (jets->size() > 0 && 
+    if (jets->size() > 0 &&
         ((usePFMET ? mets->size() : calomets->size()) > 0) ) {
         double metphi = usePFMET ? mets->front().phi() : calomets->front().phi();
-        for (typename TCollection::const_iterator j = jets->begin(); j != jets->end(); ++j) {
+        for (reco::JetView::const_iterator j = jets->begin(); j != jets->end(); ++j) {
             if (nJets >= maxNJets_)
                 break;
 
@@ -99,8 +96,9 @@ bool HLTMinDPhiMETFilter<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup
                     minDPhi = dPhi;
                 }
 
-                TRef ref(jets, distance(jets->begin(), j));
-                filterproduct.addObject(triggerType_, ref);
+                // Not sure what to save, since an event quantity is used
+                //reco::JetBaseRef ref(jets, distance(jets->begin(), j));
+                //filterproduct.addObject(triggerType_, ref);
             }
 
             ++nJets;

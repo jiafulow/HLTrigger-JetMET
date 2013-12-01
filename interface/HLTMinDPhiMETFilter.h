@@ -20,12 +20,8 @@ namespace edm {
 }
 
 // Class declaration
-template<typename T>
 class HLTMinDPhiMETFilter : public HLTFilter {
   public:
-    typedef std::vector<T> TCollection;
-    typedef edm::Ref<TCollection> TRef;
-
     explicit HLTMinDPhiMETFilter(const edm::ParameterSet&);
     ~HLTMinDPhiMETFilter();
     static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);

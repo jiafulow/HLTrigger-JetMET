@@ -61,8 +61,8 @@ void HLTMETCleanerUsingJetID<T, J>::produce(edm::Event& iEvent, const edm::Event
             double pt = usePt_ ? j->pt() : j->et();
             double eta = j->eta();
             double phi = j->phi();
-            double px = usePt_ ? j->px() : j->pt() * cos(phi);
-            double py = usePt_ ? j->py() : j->pt() * sin(phi);
+            double px = usePt_ ? j->px() : j->et() * cos(phi);
+            double py = usePt_ ? j->py() : j->et() * sin(phi);
 
             if (pt > minPt_ && std::abs(eta) < maxEta_) {
                 mex_jets -= px;

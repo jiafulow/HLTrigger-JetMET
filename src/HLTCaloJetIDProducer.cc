@@ -22,7 +22,7 @@ HLTCaloJetIDProducer::HLTCaloJetIDProducer(const edm::ParameterSet& iConfig) :
   max_EMF_    (iConfig.getParameter<double>("max_EMF")),
   inputTag_   (iConfig.getParameter<edm::InputTag>("jetsInput")),
   jetIDParams_(iConfig.getParameter<edm::ParameterSet>("JetIDParams")),
-  jetIDHelper_(jetIDParams_) {
+  jetIDHelper_(jetIDParams_,consumesCollector()) {
     m_theCaloJetToken = consumes<reco::CaloJetCollection>(inputTag_);
 
     // Register the products

@@ -75,13 +75,14 @@ bool HLTJetVBFFilter2<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& i
         // Loop on all jets
         int countJet1 = 0;
         int countJet2 = 0;
-        for (typename TCollection::const_iterator j1 = jets->begin(); j1 != jets->end(); ++j1) {
+        for (typename TCollection::const_iterator j1 = jets->begin(); j1 != jets->end()-1; ++j1) {
             ++countJet1;
             double ptj1 = j1->pt();
             double etaj1 = j1->eta();
 
             if (leadingJetOnly_ && countJet1 > 2)  break;
-            if (ptj1 < minPtHigh_)  break;  // No need to go to the next jets (lower pT)
+            //if (ptj1 < minPtHigh_)  break;  // No need to go to the next jets (lower pT)
+            if (ptj1 < minPtHigh_)  continue;  // Not necessarily ordered by pT
             if (std::abs(etaj1) > maxEta_)  continue;
 
             countJet2 = countJet1-1;
@@ -91,7 +92,8 @@ bool HLTJetVBFFilter2<T>::hltFilter(edm::Event& iEvent, const edm::EventSetup& i
                 double etaj2 = j2->eta();
 
                 if (leadingJetOnly_ && countJet2 > 2)  break;
-                if (ptj2 < minPtLow_)  break;  // No need to go to the next jets (lower pT)
+                //if (ptj2 < minPtLow_)  break;  // No need to go to the next jets (lower pT)
+                if (ptj2 < minPtLow_)  continue;  // Not necessarily ordered by pT
                 if (std::abs(etaj2) > maxEta_)  continue;
 
                 double deltaEta = std::abs(etaj1 - etaj2);

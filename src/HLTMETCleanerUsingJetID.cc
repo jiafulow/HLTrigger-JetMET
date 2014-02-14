@@ -31,8 +31,8 @@ void HLTMETCleanerUsingJetID<T, J>::fillDescriptions(edm::ConfigurationDescripti
     edm::ParameterSetDescription desc;
     desc.add<bool>("usePt", false);
     desc.add<bool>("excludePFMuons", false);
-    desc.add<double>("minPt", 0.);
-    desc.add<double>("maxEta", 999.);
+    desc.add<double>("minPt", 20.);
+    desc.add<double>("maxEta", 5.);
     desc.add<edm::InputTag>("metLabel", edm::InputTag("hltMet"));
     desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltAntiKT5CaloJets"));
     desc.add<edm::InputTag>("goodJetsLabel", edm::InputTag("hltCaloJetIDPassed"));

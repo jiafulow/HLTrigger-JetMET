@@ -22,6 +22,17 @@
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+#include "DataFormats/Common/interface/View.h"
+#include "DataFormats/JetReco/interface/Jet.h"
+#include "DataFormats/JetReco/interface/JetCollection.h"
+#include "DataFormats/METReco/interface/MET.h"
+#include "DataFormats/METReco/interface/METFwd.h"
+#include "DataFormats/TrackReco/interface/Track.h"
+#include "DataFormats/ParticleFlowReco/interface/PFRecTrack.h"
+#include "DataFormats/ParticleFlowReco/interface/PFRecTrackFwd.h"
+#include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
+#include "DataFormats/ParticleFlowCandidate/interface/PFCandidateFwd.h"
+
 
 namespace edm {
     class ConfigurationDescriptions;
@@ -77,6 +88,11 @@ class HLTHtMhtProducer2 : public edm::EDProducer {
     edm::InputTag tracksLabel_;
     edm::InputTag pfRecTracksLabel_;
     edm::InputTag pfCandidatesLabel_;
+
+    edm::EDGetTokenT<reco::JetView> m_theJetToken;
+    edm::EDGetTokenT<reco::TrackCollection> m_theTrackToken;
+    edm::EDGetTokenT<reco::PFRecTrackCollection> m_theRecTrackToken;
+    edm::EDGetTokenT<reco::PFCandidateCollection> m_thePfCandidateToken;
 };
 
 #endif  // HLTHtMhtProducer2_h_

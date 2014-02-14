@@ -13,8 +13,6 @@
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
-#include "DataFormats/METReco/interface/MET.h"
-#include "DataFormats/METReco/interface/METFwd.h"
 
 
 // Constructor
@@ -42,6 +40,11 @@ HLTHtMhtFilter2::HLTHtMhtFilter2(const edm::ParameterSet & iConfig) : HLTFilter(
 
     moduleLabel_ = iConfig.getParameter<std::string>("@module_label");
 
+    for(unsigned int i=0; i<nOrs_; ++i) {
+        m_theHtToken.push_back(consumes<reco::METCollection>(htLabels_[i]));
+        m_theMhtToken.push_back(consumes<reco::METCollection>(mhtLabels_[i]));
+    }
+
     // Register the products
     produces<reco::METCollection>();
 }
@@ -54,7 +57,7 @@ void HLTHtMhtFilter2::fillDescriptions(edm::ConfigurationDescriptions & descript
     std::vector<edm::InputTag> tmp1(1, edm::InputTag("hltHtMhtProducer"));
     std::vector<double>        tmp2(1, 0.);
     edm::ParameterSetDescription desc;
-    desc.add<bool>("saveTags", false);
+    makeHLTFilterDescription(desc);
     desc.add<std::vector<edm::InputTag> >("htLabels",  tmp1);
     desc.add<std::vector<edm::InputTag> >("mhtLabels", tmp1);
     tmp2[0] = 250; desc.add<std::vector<double> >("minHt",     tmp2);
@@ -65,7 +68,7 @@ void HLTHtMhtFilter2::fillDescriptions(edm::ConfigurationDescriptions & descript
 }
 
 // Make filter decision
-bool HLTHtMhtFilter2::hltFilter(edm::Event & iEvent, const edm::EventSetup & iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) {
+bool HLTHtMhtFilter2::hltFilter(edm::Event & iEvent, const edm::EventSetup & iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const {
 
     // Create a pointer to the output filter objects
     std::auto_ptr<reco::METCollection> result(new reco::METCollection());
@@ -78,16 +81,14 @@ bool HLTHtMhtFilter2::hltFilter(edm::Event & iEvent, const edm::EventSetup & iSe
     // Take the .OR. of all sets of requirements
     for (unsigned int i = 0; i < nOrs_; ++i) {
         edm::Handle<reco::METCollection> hht;
-        iEvent.getByLabel(htLabels_[i], hht);
+        iEvent.getByToken(m_theHtToken[i], hht);
         double ht = 0;
         if (hht->size() > 0)  ht = hht->front().sumEt();
 
         edm::Handle<reco::METCollection> hmht;
-        iEvent.getByLabel(mhtLabels_[i], hmht);
+        iEvent.getByToken(m_theMhtToken[i], hmht);
         double mht = 0;
         if (hmht->size() > 0)  mht = hmht->front().pt();
-        reco::MET::LorentzVector mht_p4;
-        if (hmht->size() > 0)  mht_p4 = hmht->front().p4();
 
         // Check if the event passes this cut set
         accept = accept || (ht > minHt_[i] && mht > minMht_[i] && sqrt(mht + meffSlope_[i]*ht) > minMeff_[i]);
@@ -97,7 +98,7 @@ bool HLTHtMhtFilter2::hltFilter(edm::Event & iEvent, const edm::EventSetup & iSe
         // will be checked only
 
         // Store the object that was cut on and the ref to it
-        reco::MET htmht(ht, mht_p4, reco::MET::Point(0, 0, 0));
+        reco::MET htmht(ht, hmht->front().p4(), reco::MET::Point(0, 0, 0));
         result->push_back(htmht);
 
         edm::Ref<reco::METCollection> htmhtref(iEvent.getRefBeforePut<reco::METCollection>(), i);  // reference to i-th object

@@ -13,8 +13,6 @@
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 #include "DataFormats/Common/interface/Handle.h"
 #include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
-#include "DataFormats/METReco/interface/MET.h"
-#include "DataFormats/METReco/interface/METFwd.h"
 
 
 // Constructor
@@ -22,13 +20,17 @@ HLTMhtFilter2::HLTMhtFilter2(const edm::ParameterSet & iConfig) : HLTFilter(iCon
   minMht_    ( iConfig.getParameter<std::vector<double> >("minMht") ),
   mhtLabels_ ( iConfig.getParameter<std::vector<edm::InputTag> >("mhtLabels") ),
   nOrs_      ( mhtLabels_.size() ) {  // number of settings to .OR.
-    if (!mhtLabels_.size() == minMht_.size() ||
+    if (!(mhtLabels_.size() == minMht_.size()) ||
         mhtLabels_.size() == 0 ) {
         nOrs_ = (minMht_.size()    < nOrs_ ? minMht_.size()    : nOrs_);
         edm::LogError("HLTMhtFilter2") << "inconsistent module configuration!";
     }
 
     moduleLabel_ = iConfig.getParameter<std::string>("@module_label");
+
+    for(unsigned int i=0; i<nOrs_; ++i) {
+        m_theMhtToken.push_back(consumes<reco::METCollection>(mhtLabels_[i]));
+    }
 
     // Register the products
     produces<reco::METCollection>();
@@ -42,14 +44,14 @@ void HLTMhtFilter2::fillDescriptions(edm::ConfigurationDescriptions & descriptio
     std::vector<edm::InputTag> tmp1(1, edm::InputTag("hltMhtProducer"));
     std::vector<double>        tmp2(1, 0.);
     edm::ParameterSetDescription desc;
-    desc.add<bool>("saveTags", false);
+    makeHLTFilterDescription(desc);
     desc.add<std::vector<edm::InputTag> >("mhtLabels", tmp1);
     tmp2[0] =  70; desc.add<std::vector<double> >("minMht", tmp2);
     descriptions.add("hltMhtFilter2", desc);
 }
 
 // Make filter decision
-bool HLTMhtFilter2::hltFilter(edm::Event & iEvent, const edm::EventSetup & iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) {
+bool HLTMhtFilter2::hltFilter(edm::Event & iEvent, const edm::EventSetup & iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const {
 
     // Create a pointer to the output filter objects
     std::auto_ptr<reco::METCollection> result(new reco::METCollection());
@@ -62,7 +64,7 @@ bool HLTMhtFilter2::hltFilter(edm::Event & iEvent, const edm::EventSetup & iSetu
     // Take the .OR. of all sets of requirements
     for (unsigned int i = 0; i < nOrs_; ++i) {
         edm::Handle<reco::METCollection> hmht;
-        iEvent.getByLabel(mhtLabels_[i], hmht);
+        iEvent.getByToken(m_theMhtToken[i], hmht);
         double mht = 0;
         if (hmht->size() > 0)  mht = hmht->front().pt();
 

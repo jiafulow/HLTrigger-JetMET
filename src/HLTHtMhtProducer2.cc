@@ -2,7 +2,7 @@
  *
  * See header file for documentation
  *
- *  \author Gheorghe Lungu
+ *  \author Steven Lowette
  *
  */
 
@@ -12,16 +12,6 @@
 #include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 #include "DataFormats/Common/interface/Handle.h"
-#include "DataFormats/Common/interface/View.h"
-#include "DataFormats/JetReco/interface/Jet.h"
-#include "DataFormats/JetReco/interface/JetCollection.h"
-#include "DataFormats/METReco/interface/MET.h"
-#include "DataFormats/METReco/interface/METFwd.h"
-#include "DataFormats/TrackReco/interface/Track.h"
-#include "DataFormats/ParticleFlowReco/interface/PFRecTrack.h"
-#include "DataFormats/ParticleFlowReco/interface/PFRecTrackFwd.h"
-#include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
-#include "DataFormats/ParticleFlowCandidate/interface/PFCandidateFwd.h"
 
 
 // Constructor
@@ -42,6 +32,10 @@ HLTHtMhtProducer2::HLTHtMhtProducer2(const edm::ParameterSet & iConfig) :
   tracksLabel_            ( iConfig.getParameter<edm::InputTag>("tracksLabel") ),
   pfRecTracksLabel_       ( iConfig.getParameter<edm::InputTag>("pfRecTracksLabel") ),
   pfCandidatesLabel_      ( iConfig.getParameter<edm::InputTag>("pfCandidatesLabel") ) {
+    m_theJetToken = consumes<edm::View<reco::Jet>>(jetsLabel_);
+    m_theTrackToken = consumes<reco::TrackCollection>(tracksLabel_);
+    m_theRecTrackToken = consumes<reco::PFRecTrackCollection>(pfRecTracksLabel_);
+    m_thePfCandidateToken = consumes<reco::PFCandidateCollection>(pfCandidatesLabel_);
 
     // Register the products
     produces<reco::METCollection>();
@@ -52,6 +46,7 @@ HLTHtMhtProducer2::~HLTHtMhtProducer2() {}
 
 // Fill descriptions
 void HLTHtMhtProducer2::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
+    // Current default is for hltHtMht
     edm::ParameterSetDescription desc;
     desc.add<bool>("usePt", false);
     desc.add<bool>("useTracks", false);
@@ -88,17 +83,17 @@ void HLTHtMhtProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     }
 
     edm::Handle<reco::JetView> jets;
-    if (useJets) iEvent.getByLabel(jetsLabel_, jets);
+    if (useJets) iEvent.getByToken(m_theJetToken, jets);
 
     edm::Handle<reco::TrackCollection> tracks;
-    if (useTracks_) iEvent.getByLabel(tracksLabel_, tracks);
+    if (useTracks_) iEvent.getByToken(m_theTrackToken, tracks);
 
     edm::Handle<reco::PFRecTrackCollection> pfRecTracks;
-    if (usePFRecTracks_) iEvent.getByLabel(pfRecTracksLabel_, pfRecTracks);
+    if (usePFRecTracks_) iEvent.getByToken(m_theRecTrackToken, pfRecTracks);
 
     edm::Handle<reco::PFCandidateCollection> pfCandidates;
     if (excludePFMuons_ || usePFCandidatesCharged_ || usePFCandidates_)
-        iEvent.getByLabel(pfCandidatesLabel_, pfCandidates);
+        iEvent.getByToken(m_thePfCandidateToken, pfCandidates);
 
     int nj_ht = 0, nj_mht = 0;
     double ht = 0., mhx = 0., mhy = 0.;

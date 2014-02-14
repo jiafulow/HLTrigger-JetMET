@@ -12,16 +12,6 @@
 #include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 #include "DataFormats/Common/interface/Handle.h"
-#include "DataFormats/Common/interface/View.h"
-#include "DataFormats/JetReco/interface/Jet.h"
-#include "DataFormats/JetReco/interface/JetCollection.h"
-#include "DataFormats/METReco/interface/MET.h"
-#include "DataFormats/METReco/interface/METFwd.h"
-#include "DataFormats/TrackReco/interface/Track.h"
-#include "DataFormats/ParticleFlowReco/interface/PFRecTrack.h"
-#include "DataFormats/ParticleFlowReco/interface/PFRecTrackFwd.h"
-#include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
-#include "DataFormats/ParticleFlowCandidate/interface/PFCandidateFwd.h"
 
 
 // Constructor
@@ -32,12 +22,17 @@ HLTMhtProducer2::HLTMhtProducer2(const edm::ParameterSet & iConfig) :
   usePFCandidatesCharged_ ( iConfig.getParameter<bool>("usePFCandidatesCharged") ),
   usePFCandidates_        ( iConfig.getParameter<bool>("usePFCandidates") ),
   excludePFMuons_         ( iConfig.getParameter<bool>("excludePFMuons") ),
+  minNJet_                ( iConfig.getParameter<int>("minNJet") ),
   minPtJet_               ( iConfig.getParameter<double>("minPtJet") ),
   maxEtaJet_              ( iConfig.getParameter<double>("maxEtaJet") ),
   jetsLabel_              ( iConfig.getParameter<edm::InputTag>("jetsLabel") ),
   tracksLabel_            ( iConfig.getParameter<edm::InputTag>("tracksLabel") ),
   pfRecTracksLabel_       ( iConfig.getParameter<edm::InputTag>("pfRecTracksLabel") ),
   pfCandidatesLabel_      ( iConfig.getParameter<edm::InputTag>("pfCandidatesLabel") ) {
+    m_theJetToken = consumes<edm::View<reco::Jet>>(jetsLabel_);
+    m_theTrackToken = consumes<reco::TrackCollection>(tracksLabel_);
+    m_theRecTrackToken = consumes<reco::PFRecTrackCollection>(pfRecTracksLabel_);
+    m_thePfCandidateToken = consumes<reco::PFCandidateCollection>(pfCandidatesLabel_);
 
     // Register the products
     produces<reco::METCollection>();
@@ -48,6 +43,7 @@ HLTMhtProducer2::~HLTMhtProducer2() {}
 
 // Fill descriptions
 void HLTMhtProducer2::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
+    // Current default is for hltPFMET
     edm::ParameterSetDescription desc;
     desc.add<bool>("usePt", true);
     desc.add<bool>("useTracks", false);
@@ -55,6 +51,7 @@ void HLTMhtProducer2::fillDescriptions(edm::ConfigurationDescriptions & descript
     desc.add<bool>("usePFCandidatesCharged", false);
     desc.add<bool>("usePFCandidates", false);
     desc.add<bool>("excludePFMuons", false);
+    desc.add<int>("minNJet",0);
     desc.add<double>("minPtJet", 0.);
     desc.add<double>("maxEtaJet", 999.);
     desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltAntiKT5PFJets"));
@@ -74,21 +71,25 @@ void HLTMhtProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         excludePFMuons_ = false;
 
     bool useJets = !useTracks_ && !usePFRecTracks_ && !usePFCandidatesCharged_ && !usePFCandidates_;
+    if (!useJets) {
+        minNJet_ = 0;
+    }
 
     edm::Handle<reco::JetView> jets;
-    if (useJets) iEvent.getByLabel(jetsLabel_, jets);
+    if (useJets) iEvent.getByToken(m_theJetToken, jets);
 
     edm::Handle<reco::TrackCollection> tracks;
-    if (useTracks_) iEvent.getByLabel(tracksLabel_, tracks);
+    if (useTracks_) iEvent.getByToken(m_theTrackToken, tracks);
 
     edm::Handle<reco::PFRecTrackCollection> pfRecTracks;
-    if (usePFRecTracks_) iEvent.getByLabel(pfRecTracksLabel_, pfRecTracks);
+    if (usePFRecTracks_) iEvent.getByToken(m_theRecTrackToken, pfRecTracks);
 
     edm::Handle<reco::PFCandidateCollection> pfCandidates;
     if (excludePFMuons_ || usePFCandidatesCharged_ || usePFCandidates_)
-        iEvent.getByLabel(pfCandidatesLabel_, pfCandidates);
+        iEvent.getByToken(m_thePfCandidateToken, pfCandidates);
 
-    double mhx = 0., mhy = 0.;
+    int nj = 0;
+    double sumet = 0., mhx = 0., mhy = 0.;
 
     if (useJets && jets->size() > 0) {
         for(reco::JetView::const_iterator j = jets->begin(); j != jets->end(); ++j) {
@@ -101,6 +102,8 @@ void HLTMhtProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             if (pt > minPtJet_ && std::abs(eta) < maxEtaJet_) {
                 mhx -= px;
                 mhy -= py;
+                sumet += pt;
+                ++nj;
             }
         }
 
@@ -114,6 +117,8 @@ void HLTMhtProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             if (pt > minPtJet_ && std::abs(eta) < maxEtaJet_) {
                 mhx -= px;
                 mhy -= py;
+                sumet += pt;
+                ++nj;
             }
         }
 
@@ -127,6 +132,8 @@ void HLTMhtProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             if (pt > minPtJet_ && std::abs(eta) < maxEtaJet_) {
                 mhx -= px;
                 mhy -= py;
+                sumet += pt;
+                ++nj;
             }
         }
 
@@ -141,6 +148,8 @@ void HLTMhtProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             if (pt > minPtJet_ && std::abs(eta) < maxEtaJet_) {
                 mhx -= px;
                 mhy -= py;
+                sumet += pt;
+                ++nj;
             }
         }
     }
@@ -154,9 +163,11 @@ void HLTMhtProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         }
     }
 
+    if (nj < minNJet_) { sumet = 0.; mhx = 0; mhy = 0; }
+
     reco::MET::LorentzVector p4(mhx, mhy, 0, sqrt(mhx*mhx + mhy*mhy));
     reco::MET::Point vtx(0, 0, 0);
-    reco::MET mht(p4, vtx);
+    reco::MET mht(sumet, p4, vtx);
     result->push_back(mht);
 
     // Put the products into the Event

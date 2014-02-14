@@ -17,6 +17,9 @@
 
 #include "HLTrigger/HLTcore/interface/HLTFilter.h"
 
+#include "DataFormats/METReco/interface/MET.h"
+#include "DataFormats/METReco/interface/METFwd.h"
+
 
 namespace edm {
     class ConfigurationDescriptions;
@@ -28,7 +31,7 @@ class HLTHtMhtFilter2 : public HLTFilter {
     explicit HLTHtMhtFilter2(const edm::ParameterSet & iConfig);
     ~HLTHtMhtFilter2();
     static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-    virtual bool hltFilter(edm::Event & iEvent, const edm::EventSetup & iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct);
+    virtual bool hltFilter(edm::Event & iEvent, const edm::EventSetup & iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const override;
 
   private:
     /// Minimum HT requirements
@@ -49,6 +52,9 @@ class HLTHtMhtFilter2 : public HLTFilter {
 
     unsigned int nOrs_;  /// number of pairs of HT and MHT
     std::string moduleLabel_;
+
+    std::vector<edm::EDGetTokenT<reco::METCollection> > m_theHtToken;
+    std::vector<edm::EDGetTokenT<reco::METCollection> > m_theMhtToken;
 };
 
 #endif  // HLTHtMhtFilter2_h_

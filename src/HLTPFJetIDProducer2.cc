@@ -12,9 +12,6 @@
 #include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 #include "DataFormats/Common/interface/Handle.h"
-#include "DataFormats/Common/interface/View.h"
-#include "DataFormats/JetReco/interface/PFJet.h"
-#include "DataFormats/JetReco/interface/PFJetCollection.h"
 
 
 // Constructor
@@ -27,6 +24,7 @@ HLTPFJetIDProducer2::HLTPFJetIDProducer2(const edm::ParameterSet& iConfig) :
   NCH_      (iConfig.getParameter<int>("NCH")),
   NTOT_     (iConfig.getParameter<int>("NTOT")),
   inputTag_ (iConfig.getParameter<edm::InputTag>("inputTag")) {
+    m_thePFJetToken = consumes<reco::PFJetCollection>(inputTag_);
 
     // Register the products
     produces<reco::PFJetCollection>();
@@ -56,7 +54,7 @@ void HLTPFJetIDProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSe
     std::auto_ptr<reco::PFJetCollection> result (new reco::PFJetCollection());
 
     edm::Handle<reco::PFJetCollection> pfjets;
-    iEvent.getByLabel(inputTag_, pfjets);
+    iEvent.getByToken(m_thePFJetToken, pfjets);
 
     for (reco::PFJetCollection::const_iterator j = pfjets->begin(); j != pfjets->end(); ++j) {
         bool pass = false;

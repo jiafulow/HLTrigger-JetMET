@@ -15,6 +15,9 @@
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+#include "DataFormats/JetReco/interface/PFJet.h"
+#include "DataFormats/JetReco/interface/PFJetCollection.h"
+
 
 namespace edm {
    class ConfigurationDescriptions;
@@ -37,6 +40,8 @@ class HLTPFJetIDProducer2 : public edm::EDProducer {
     int NCH_;                 ///< number of charged constituents
     int NTOT_;                ///< number of constituents
     edm::InputTag inputTag_;  ///< input PF jet collection
+
+    edm::EDGetTokenT<reco::PFJetCollection> m_thePFJetToken;
 };
 
 #endif  // HLTPFJetIDProducer2_h_

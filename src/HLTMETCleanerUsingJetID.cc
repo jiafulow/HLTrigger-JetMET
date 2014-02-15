@@ -11,8 +11,7 @@
 
 
 // Constructor
-template<class T, class J>
-HLTMETCleanerUsingJetID<T, J>::HLTMETCleanerUsingJetID(const edm::ParameterSet& iConfig)
+HLTMETCleanerUsingJetID::HLTMETCleanerUsingJetID(const edm::ParameterSet& iConfig)
       : usePt_         (iConfig.getParameter<bool>("usePt")),
         excludePFMuons_(iConfig.getParameter<bool>("excludePFMuons")),
         minPt_         (iConfig.getParameter<double>("minPt")),
@@ -20,14 +19,16 @@ HLTMETCleanerUsingJetID<T, J>::HLTMETCleanerUsingJetID(const edm::ParameterSet& 
         metLabel_      (iConfig.getParameter<edm::InputTag>("metLabel")),
         jetsLabel_     (iConfig.getParameter<edm::InputTag>("jetsLabel")),
         goodJetsLabel_ (iConfig.getParameter<edm::InputTag>("goodJetsLabel")) {
-    // Register your products
-    produces<std::vector<T> > ();
+    m_theMETToken = consumes<reco::CaloMETCollection>(metLabel_);
+    m_theJetToken = consumes<reco::CaloJetCollection>(jetsLabel_);
+    m_theGoodJetToken = consumes<reco::CaloJetCollection>(goodJetsLabel_);
 
+    // Register your products
+    produces<reco::CaloMETCollection> ();
 }
 
 // Fill descriptions
-template<class T, class J>
-void HLTMETCleanerUsingJetID<T, J>::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+void HLTMETCleanerUsingJetID::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
     edm::ParameterSetDescription desc;
     desc.add<bool>("usePt", false);
     desc.add<bool>("excludePFMuons", false);
@@ -36,28 +37,27 @@ void HLTMETCleanerUsingJetID<T, J>::fillDescriptions(edm::ConfigurationDescripti
     desc.add<edm::InputTag>("metLabel", edm::InputTag("hltMet"));
     desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltAntiKT5CaloJets"));
     desc.add<edm::InputTag>("goodJetsLabel", edm::InputTag("hltCaloJetIDPassed"));
-    descriptions.add(std::string("hlt")+std::string(typeid(HLTMETCleanerUsingJetID<T, J>).name()),desc);
+    descriptions.add("hltMETCleanerUsingJetID",desc);
 }
 
 // Produce the products
-template<class T, class J>
-void HLTMETCleanerUsingJetID<T, J>::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
+void HLTMETCleanerUsingJetID::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
-    std::auto_ptr<std::vector<T> > result(new std::vector<T>);
+    std::auto_ptr<reco::CaloMETCollection> result(new reco::CaloMETCollection);
 
-    edm::Handle<std::vector<T> > met;
-    edm::Handle<std::vector<J> > jets;
-    edm::Handle<std::vector<J> > goodJets;
+    edm::Handle<reco::CaloMETCollection> met;
+    edm::Handle<reco::CaloJetCollection> jets;
+    edm::Handle<reco::CaloJetCollection> goodJets;
 
-    iEvent.getByLabel(metLabel_, met);
-    iEvent.getByLabel(jetsLabel_, jets);
-    iEvent.getByLabel(goodJetsLabel_, goodJets);
+    iEvent.getByToken(m_theMETToken, met);
+    iEvent.getByToken(m_theJetToken, jets);
+    iEvent.getByToken(m_theGoodJetToken, goodJets);
 
     double mex_jets = 0.;
     double mey_jets = 0.;
     double sumet_jets = 0.;
     if (jets->size() > 0 ) {
-        for(typename std::vector<J>::const_iterator j = jets->begin(); j != jets->end(); ++j) {
+        for(reco::CaloJetCollection::const_iterator j = jets->begin(); j != jets->end(); ++j) {
             double pt = usePt_ ? j->pt() : j->et();
             double eta = j->eta();
             double phi = j->phi();
@@ -76,7 +76,7 @@ void HLTMETCleanerUsingJetID<T, J>::produce(edm::Event& iEvent, const edm::Event
     double mey_goodJets = 0.;
     double sumet_goodJets = 0.;
     if (goodJets->size() > 0) {
-        for(typename std::vector<J>::const_iterator j = goodJets->begin(); j != goodJets->end(); ++j) {
+        for(reco::CaloJetCollection::const_iterator j = goodJets->begin(); j != goodJets->end(); ++j) {
             double pt = usePt_ ? j->pt() : j->et();
             double eta = j->eta();
             double phi = j->phi();
@@ -94,13 +94,11 @@ void HLTMETCleanerUsingJetID<T, J>::produce(edm::Event& iEvent, const edm::Event
     if (met->size() > 0) {
         double mex_diff = mex_goodJets - mex_jets;
         double mey_diff = mey_goodJets - mey_jets;
-        double sumet_diff = sumet_goodJets - sumet_jets;
-        if (sumet_diff > 0)  std::cout << sumet_diff << std::endl;  // FIXME: remove this
-        assert(sumet_diff <= 0.);  // FIXME: remove this
+        //double sumet_diff = sumet_goodJets - sumet_jets;  // cannot set sumet...
         reco::Candidate::LorentzVector p4_diff(mex_diff, mey_diff, 0, sqrt(mex_diff*mex_diff + mey_diff*mey_diff));
 
-        T cleanmet = met->front();
-        cleanmet.setP4(cleanmet.p4() + p4_diff);  // cannot set sumet...
+        reco::CaloMET cleanmet = met->front();
+        cleanmet.setP4(cleanmet.p4() + p4_diff);
         result->push_back(cleanmet);
     }
 

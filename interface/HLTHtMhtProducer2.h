@@ -92,7 +92,7 @@ class HLTHtMhtProducer2 : public edm::EDProducer {
     edm::EDGetTokenT<reco::JetView> m_theJetToken;
     edm::EDGetTokenT<reco::TrackCollection> m_theTrackToken;
     edm::EDGetTokenT<reco::PFRecTrackCollection> m_theRecTrackToken;
-    edm::EDGetTokenT<reco::PFCandidateCollection> m_thePfCandidateToken;
+    edm::EDGetTokenT<reco::PFCandidateCollection> m_thePFCandidateToken;
 };
 
 #endif  // HLTHtMhtProducer2_h_

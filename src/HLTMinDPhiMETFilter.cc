@@ -35,6 +35,9 @@ HLTMinDPhiMETFilter::HLTMinDPhiMETFilter(const edm::ParameterSet& iConfig) : HLT
   metLabel_       (iConfig.getParameter<edm::InputTag>("metLabel")),
   calometLabel_   (iConfig.getParameter<edm::InputTag>("calometLabel")),
   jetsLabel_      (iConfig.getParameter<edm::InputTag>("jetsLabel")) {
+    m_theMETToken = consumes<reco::METCollection>(metLabel_);
+    m_theCaloMETToken = consumes<reco::CaloMETCollection>(calometLabel_);
+    m_theJetToken = consumes<reco::JetView>(jetsLabel_);
 }
 
 // Destructor
@@ -43,8 +46,7 @@ HLTMinDPhiMETFilter::~HLTMinDPhiMETFilter() {}
 // Fill descriptions
 void HLTMinDPhiMETFilter::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
     edm::ParameterSetDescription desc;
-    //makeHLTFilterDescription(desc);
-    desc.add<bool>("saveTags", false);
+    makeHLTFilterDescription(desc);
     desc.add<bool>("usePt", true);
     //desc.add<bool>("excludePFMuons", false);
     desc.add<int>("triggerType", trigger::TriggerJet);
@@ -59,7 +61,7 @@ void HLTMinDPhiMETFilter::fillDescriptions(edm::ConfigurationDescriptions& descr
 }
 
 // Make filter decision
-bool HLTMinDPhiMETFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) {
+bool HLTMinDPhiMETFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const {
 
     // The filter object
     if (saveTags()) filterproduct.addCollectionTag(jetsLabel_);
@@ -69,13 +71,13 @@ bool HLTMinDPhiMETFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& i
     edm::Handle<reco::METCollection> mets;
     edm::Handle<reco::CaloMETCollection> calomets;
     if (usePFMET) {
-        iEvent.getByLabel(metLabel_, mets);
+        iEvent.getByToken(m_theMETToken, mets);
     } else {
-        iEvent.getByLabel(calometLabel_, calomets);
+        iEvent.getByToken(m_theMETToken, calomets);
     }
 
     edm::Handle<reco::JetView> jets;  // assume to be sorted by pT
-    iEvent.getByLabel(jetsLabel_, jets);
+    iEvent.getByToken(m_theJetToken, jets);
 
     double minDPhi = 9999.;
     int nJets = 0;  // nJets counts all jets in the events, not only those that pass pt, eta requirements

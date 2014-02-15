@@ -32,7 +32,7 @@ HLTMhtProducer2::HLTMhtProducer2(const edm::ParameterSet & iConfig) :
     m_theJetToken = consumes<edm::View<reco::Jet>>(jetsLabel_);
     m_theTrackToken = consumes<reco::TrackCollection>(tracksLabel_);
     m_theRecTrackToken = consumes<reco::PFRecTrackCollection>(pfRecTracksLabel_);
-    m_thePfCandidateToken = consumes<reco::PFCandidateCollection>(pfCandidatesLabel_);
+    m_thePFCandidateToken = consumes<reco::PFCandidateCollection>(pfCandidatesLabel_);
 
     // Register the products
     produces<reco::METCollection>();
@@ -86,7 +86,7 @@ void HLTMhtProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     edm::Handle<reco::PFCandidateCollection> pfCandidates;
     if (excludePFMuons_ || usePFCandidatesCharged_ || usePFCandidates_)
-        iEvent.getByToken(m_thePfCandidateToken, pfCandidates);
+        iEvent.getByToken(m_thePFCandidateToken, pfCandidates);
 
     int nj = 0;
     double sumet = 0., mhx = 0., mhy = 0.;

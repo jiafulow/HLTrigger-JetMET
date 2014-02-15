@@ -6,13 +6,19 @@
  *  \brief  This rejects events using the minimum delta phi between a jet and MET.
  *  \author Jia Fu Low (Nov 2013)
  *
- *  (Descriptions go here...)
- *
- *  \todo   Also allow minDPhi using CaloJet & CaloMET?
+ *  This code rejects events when a jet is too close to MET. The angle between
+ *  the closest jet and MET in the transverse plane is called the min delta phi.
  *
  */
 
 #include "HLTrigger/HLTcore/interface/HLTFilter.h"
+
+#include "DataFormats/METReco/interface/CaloMET.h"
+#include "DataFormats/METReco/interface/CaloMETFwd.h"
+#include "DataFormats/METReco/interface/MET.h"
+#include "DataFormats/METReco/interface/METFwd.h"
+#include "DataFormats/JetReco/interface/Jet.h"
+#include "DataFormats/JetReco/interface/JetCollection.h"
 
 
 namespace edm {
@@ -25,7 +31,7 @@ class HLTMinDPhiMETFilter : public HLTFilter {
     explicit HLTMinDPhiMETFilter(const edm::ParameterSet&);
     ~HLTMinDPhiMETFilter();
     static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-    virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct);
+    virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct) const override;
 
   private:
     /// Use pt; otherwise, use et.
@@ -52,6 +58,10 @@ class HLTMinDPhiMETFilter : public HLTFilter {
     edm::InputTag metLabel_;
     edm::InputTag calometLabel_;  // only used if metLabel_ is empty
     edm::InputTag jetsLabel_;
+
+    edm::EDGetTokenT<reco::METCollection> m_theMETToken;
+    edm::EDGetTokenT<reco::CaloMETCollection> m_theCaloMETToken;
+    edm::EDGetTokenT<reco::JetView> m_theJetToken;
 };
 
 #endif  // HLTMinDPhiMETFilter_h_

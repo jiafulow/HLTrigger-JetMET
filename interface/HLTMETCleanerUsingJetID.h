@@ -5,14 +5,12 @@
  *
  *  \brief  This creates a MET object from the difference in MET between two
  *          input jet collections.
- *  \author Jia Fu Low <jia.fu.low@cern.ch>
- *  \date   November 2013
+ *  \author Jia Fu Low (Nov 2013)
  *
  *  This code creates a new MET vector defined as:
  *
  *    output MET = input MET + MET from 'good jets' - MET from 'all jets'
  *
- *  N.B. SpecificCaloMETData is not updated.
  *
  */
 
@@ -22,9 +20,17 @@
 #include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+#include "DataFormats/METReco/interface/CaloMET.h"
+#include "DataFormats/METReco/interface/CaloMETFwd.h"
+#include "DataFormats/JetReco/interface/CaloJet.h"
+#include "DataFormats/JetReco/interface/CaloJetCollection.h"
+
+
+namespace edm {
+   class ConfigurationDescriptions;
+}
 
 // Class declaration
-template<class T, class J>
 class HLTMETCleanerUsingJetID : public edm::EDProducer {
   public:
     explicit HLTMETCleanerUsingJetID(const edm::ParameterSet&);
@@ -47,6 +53,10 @@ class HLTMETCleanerUsingJetID : public edm::EDProducer {
 
     /// Input tag for the 'good jets' collection
     edm::InputTag   goodJetsLabel_;
+
+    edm::EDGetTokenT<reco::CaloMETCollection> m_theMETToken;
+    edm::EDGetTokenT<reco::CaloJetCollection> m_theJetToken;
+    edm::EDGetTokenT<reco::CaloJetCollection> m_theGoodJetToken;
 };
 
 #endif  // HLTMETCleanerUsingJetID_h_

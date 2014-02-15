@@ -12,9 +12,6 @@
 #include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 #include "DataFormats/Common/interface/Handle.h"
-#include "DataFormats/Common/interface/View.h"
-#include "DataFormats/JetReco/interface/CaloJet.h"
-#include "DataFormats/JetReco/interface/CaloJetCollection.h"
 
 
 // Constructor
@@ -26,6 +23,7 @@ HLTCaloJetIDProducer2::HLTCaloJetIDProducer2(const edm::ParameterSet& iConfig) :
   inputTag_   (iConfig.getParameter<edm::InputTag>("inputTag")),
   jetIDParams_(iConfig.getParameter<edm::ParameterSet>("JetIDParams")),
   jetIDHelper_(jetIDParams_) {
+    m_theCaloJetToken = consumes<reco::CaloJetCollection>(inputTag_);
 
     // Register the products
     produces<reco::CaloJetCollection>();
@@ -37,9 +35,9 @@ HLTCaloJetIDProducer2::~HLTCaloJetIDProducer2() {}
 // Fill descriptions
 void HLTCaloJetIDProducer2::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
     edm::ParameterSetDescription desc;
-    desc.add<int>("min_N90", -2);
+    desc.add<int>("min_N90", 0);
     desc.add<int>("min_N90hits", 2);
-    desc.add<double>("min_EMF", 1e-6);
+    desc.add<double>("min_EMF", 0.0001);
     desc.add<double>("max_EMF", 999.);
     desc.add<edm::InputTag>("inputTag", edm::InputTag("hltAntiKT5CaloJets"));
 
@@ -62,7 +60,7 @@ void HLTCaloJetIDProducer2::produce(edm::Event& iEvent, const edm::EventSetup& i
     std::auto_ptr<reco::CaloJetCollection> result (new reco::CaloJetCollection());
 
     edm::Handle<reco::CaloJetCollection> calojets;
-    iEvent.getByLabel(inputTag_, calojets);
+    iEvent.getByToken(m_theCaloJetToken, calojets);
 
     for (reco::CaloJetCollection::const_iterator j = calojets->begin(); j != calojets->end(); ++j) {
         bool pass = false;

@@ -16,6 +16,9 @@
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
+#include "DataFormats/JetReco/interface/CaloJet.h"
+#include "DataFormats/JetReco/interface/CaloJetCollection.h"
+
 #include "RecoJets/JetProducers/interface/JetIDHelper.h"
 
 
@@ -47,6 +50,8 @@ class HLTCaloJetIDProducer2 : public edm::EDProducer {
 
     /// A helper to calculates calo jet ID variables.
     reco::helper::JetIDHelper jetIDHelper_;
+
+    edm::EDGetTokenT<reco::CaloJetCollection> m_theCaloJetToken;
 };
 
 #endif  // HLTCaloJetIDProducer2_h_

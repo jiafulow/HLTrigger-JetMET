@@ -54,7 +54,7 @@ void HLTMhtProducer2::fillDescriptions(edm::ConfigurationDescriptions & descript
     desc.add<int>("minNJet",0);
     desc.add<double>("minPtJet", 0.);
     desc.add<double>("maxEtaJet", 999.);
-    desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltAntiKT5PFJets"));
+    desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltAntiKT4PFJets"));
     desc.add<edm::InputTag>("tracksLabel",  edm::InputTag(""));  // set to hltL3Muons?
     desc.add<edm::InputTag>("pfRecTracksLabel",  edm::InputTag(""));  // set to hltLightPFTracks?
     desc.add<edm::InputTag>("pfCandidatesLabel",  edm::InputTag(""));  // set to hltParticleFlow?

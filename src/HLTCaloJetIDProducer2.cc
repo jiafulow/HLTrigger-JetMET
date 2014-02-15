@@ -39,7 +39,7 @@ void HLTCaloJetIDProducer2::fillDescriptions(edm::ConfigurationDescriptions & de
     desc.add<int>("min_N90hits", 2);
     desc.add<double>("min_EMF", 0.0001);
     desc.add<double>("max_EMF", 999.);
-    desc.add<edm::InputTag>("inputTag", edm::InputTag("hltAntiKT5CaloJets"));
+    desc.add<edm::InputTag>("inputTag", edm::InputTag("hltAntiKT4CaloJets"));
 
     edm::ParameterSetDescription descNested;
     descNested.add<bool>("useRecHits", true);

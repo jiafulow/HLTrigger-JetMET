@@ -43,7 +43,7 @@ void HLTPFJetIDProducer2::fillDescriptions(edm::ConfigurationDescriptions & desc
     desc.add<double>("NEF", 99.);
     desc.add<int>("NCH", 0);
     desc.add<int>("NTOT", 0);
-    desc.add<edm::InputTag>("inputTag", edm::InputTag("hltAntiKT5PFJets"));
+    desc.add<edm::InputTag>("inputTag", edm::InputTag("hltAntiKT4PFJets"));
     descriptions.add("hltPFJetIDProducer2", desc);
 }
 

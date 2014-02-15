@@ -56,7 +56,7 @@ void HLTMinDPhiMETFilter::fillDescriptions(edm::ConfigurationDescriptions& descr
     desc.add<double>("minDPhi", 0.5);
     desc.add<edm::InputTag>("metLabel", edm::InputTag("hltPFMETProducer"));
     desc.add<edm::InputTag>("calometLabel", edm::InputTag(""));
-    desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltAK5PFJetL1FastL2L3Corrected"));
+    desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltAK4PFJetL1FastL2L3Corrected"));
     descriptions.add("hltMinDPhiMETFilter", desc);
 }
 

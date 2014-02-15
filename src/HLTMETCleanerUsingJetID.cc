@@ -35,7 +35,7 @@ void HLTMETCleanerUsingJetID::fillDescriptions(edm::ConfigurationDescriptions& d
     desc.add<double>("minPt", 20.);
     desc.add<double>("maxEta", 5.);
     desc.add<edm::InputTag>("metLabel", edm::InputTag("hltMet"));
-    desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltAntiKT5CaloJets"));
+    desc.add<edm::InputTag>("jetsLabel", edm::InputTag("hltAntiKT4CaloJets"));
     desc.add<edm::InputTag>("goodJetsLabel", edm::InputTag("hltCaloJetIDPassed"));
     descriptions.add("hltMETCleanerUsingJetID",desc);
 }

@@ -98,6 +98,7 @@ bool HLTHtMhtFilter2::hltFilter(edm::Event & iEvent, const edm::EventSetup & iSe
         // will be checked only
 
         // Store the object that was cut on and the ref to it
+        // (even if it is not accepted)
         reco::MET htmht(ht, hmht->front().p4(), reco::MET::Point(0, 0, 0));
         result->push_back(htmht);
 

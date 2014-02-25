@@ -28,10 +28,10 @@ namespace edm {
 // Class declaration
 class HLTMinDPhiMETFilter : public HLTFilter {
   public:
-    explicit HLTMinDPhiMETFilter(const edm::ParameterSet&);
+    explicit HLTMinDPhiMETFilter(const edm::ParameterSet & iConfig);
     ~HLTMinDPhiMETFilter();
     static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-    virtual bool hltFilter(edm::Event&, const edm::EventSetup&, trigger::TriggerFilterObjectWithRefs & filterproduct) const override;
+    virtual bool hltFilter(edm::Event & iEvent, const edm::EventSetup & iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const override;
 
   private:
     /// Use pt; otherwise, use et.

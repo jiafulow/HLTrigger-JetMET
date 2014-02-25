@@ -23,7 +23,7 @@ HLTPFJetIDProducer2::HLTPFJetIDProducer2(const edm::ParameterSet& iConfig) :
   NEF_      (iConfig.getParameter<double>("NEF")),
   NCH_      (iConfig.getParameter<int>("NCH")),
   NTOT_     (iConfig.getParameter<int>("NTOT")),
-  inputTag_ (iConfig.getParameter<edm::InputTag>("inputTag")) {
+  inputTag_ (iConfig.getParameter<edm::InputTag>("jetsInput")) {
     m_thePFJetToken = consumes<reco::PFJetCollection>(inputTag_);
 
     // Register the products
@@ -43,7 +43,7 @@ void HLTPFJetIDProducer2::fillDescriptions(edm::ConfigurationDescriptions & desc
     desc.add<double>("NEF", 99.);
     desc.add<int>("NCH", 0);
     desc.add<int>("NTOT", 0);
-    desc.add<edm::InputTag>("inputTag", edm::InputTag("hltAntiKT4PFJets"));
+    desc.add<edm::InputTag>("jetsInput", edm::InputTag("hltAntiKT4PFJets"));
     descriptions.add("hltPFJetIDProducer2", desc);
 }
 
@@ -66,13 +66,13 @@ void HLTPFJetIDProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSe
         if (pt < minPt_) {
             pass = true;
 
-        //} else if (std::abs(eta) > 2.4) {
+        //} else if (std::abs(eta) >= 2.4) {
         //    pass = true;
 
         } else {
             double chf  = j->chargedHadronEnergyFraction();
-            double nhf  = j->neutralHadronEnergyFraction() + j->HFHadronEnergyFraction();
-            //double nhf  = j->neutralHadronEnergyFraction();
+            //double nhf  = j->neutralHadronEnergyFraction() + j->HFHadronEnergyFraction();
+            double nhf  = j->neutralHadronEnergyFraction();
             double cef  = j->chargedEmEnergyFraction();
             double nef  = j->neutralEmEnergyFraction();
             int    nch  = j->chargedMultiplicity();
@@ -82,9 +82,9 @@ void HLTPFJetIDProducer2::produce(edm::Event& iEvent, const edm::EventSetup& iSe
             pass = pass && (ntot > NTOT_);
             pass = pass && (nef < NEF_);
             pass = pass && (nhf < NHF_);
-            pass = pass && (cef < CEF_ || std::abs(eta) > 2.4);
-            pass = pass && (chf > CHF_ || std::abs(eta) > 2.4);
-            pass = pass && (nch > NCH_ || std::abs(eta) > 2.4);
+            pass = pass && (cef < CEF_ || std::abs(eta) >= 2.4);
+            pass = pass && (chf > CHF_ || std::abs(eta) >= 2.4);
+            pass = pass && (nch > NCH_ || std::abs(eta) >= 2.4);
         }
 
         if (pass)  result->push_back(*j);

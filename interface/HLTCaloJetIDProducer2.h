@@ -3,11 +3,12 @@
 
 /** \class HLTCaloJetIDProducer2
  *
- *  \brief  This applies Calo jet ID and produces a jet collection with jets that passed.
+ *  \brief  This applies CaloJet ID and produces a jet collection with jets that pass the ID.
  *  \author a Jet/MET person
  *  \author Michele de Gruttola, Jia Fu Low (Nov 2013)
  *
- *  (Descriptions)
+ *  This receives a CaloJet collection, selects jets that pass CaloJet ID,
+ *  and makes an output CaloJet collection with only jets that pass.
  *
  */
 
@@ -18,7 +19,6 @@
 
 #include "DataFormats/JetReco/interface/CaloJet.h"
 #include "DataFormats/JetReco/interface/CaloJetCollection.h"
-
 #include "RecoJets/JetProducers/interface/JetIDHelper.h"
 
 
@@ -45,8 +45,8 @@ class HLTCaloJetIDProducer2 : public edm::EDProducer {
     int min_N90hits_;                 ///< mininum N90hits
     double min_EMF_;                  ///< minimum EMF
     double max_EMF_;                  ///< maximum EMF
-    edm::InputTag inputTag_;          ///< input calo jet collection
-    edm::ParameterSet jetIDParams_;   ///< calo jet ID parameters
+    edm::InputTag inputTag_;          ///< input CaloJet collection
+    edm::ParameterSet jetIDParams_;   ///< CaloJet ID parameters
 
     /// A helper to calculates calo jet ID variables.
     reco::helper::JetIDHelper jetIDHelper_;

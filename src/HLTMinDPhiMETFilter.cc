@@ -1,25 +1,18 @@
 /** \class  HLTMinDPhiMETFilter
  *
- *  \author Jia Fu Low <jia.fu.low@cern.ch>
- *
  *  See header file for more information.
+ *  
+ *  \author a Jet/MET person
  *
  */
 
 #include "HLTrigger/JetMET/interface/HLTMinDPhiMETFilter.h"
 
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
-//#include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 #include "FWCore/ParameterSet/interface/ParameterSetDescription.h"
 //#include "DataFormats/HLTReco/interface/TriggerTypeDefs.h"
 //#include "DataFormats/HLTReco/interface/TriggerFilterObjectWithRefs.h"
-#include "DataFormats/METReco/interface/CaloMET.h"
-#include "DataFormats/METReco/interface/CaloMETFwd.h"
-#include "DataFormats/METReco/interface/MET.h"
-#include "DataFormats/METReco/interface/METFwd.h"
-#include "DataFormats/JetReco/interface/Jet.h"
-#include "DataFormats/JetReco/interface/JetCollection.h"
 #include "DataFormats/Math/interface/deltaPhi.h"
 
 
@@ -50,9 +43,9 @@ void HLTMinDPhiMETFilter::fillDescriptions(edm::ConfigurationDescriptions& descr
     desc.add<bool>("usePt", true);
     //desc.add<bool>("excludePFMuons", false);
     desc.add<int>("triggerType", trigger::TriggerJet);
-    desc.add<int>("maxNJets", 999);
-    desc.add<double>("minPt", 0.0);
-    desc.add<double>("maxEta", 9999.0);
+    desc.add<int>("maxNJets", 2);
+    desc.add<double>("minPt", 30.);
+    desc.add<double>("maxEta", 2.5);
     desc.add<double>("minDPhi", 0.5);
     desc.add<edm::InputTag>("metLabel", edm::InputTag("hltPFMETProducer"));
     desc.add<edm::InputTag>("calometLabel", edm::InputTag(""));
@@ -79,7 +72,7 @@ bool HLTMinDPhiMETFilter::hltFilter(edm::Event& iEvent, const edm::EventSetup& i
     edm::Handle<reco::JetView> jets;  // assume to be sorted by pT
     iEvent.getByToken(m_theJetToken, jets);
 
-    double minDPhi = 9999.;
+    double minDPhi = 3.141593;
     int nJets = 0;  // nJets counts all jets in the events, not only those that pass pt, eta requirements
 
     if (jets->size() > 0 &&

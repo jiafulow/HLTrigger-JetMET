@@ -31,6 +31,7 @@
 #include "HLTrigger/JetMET/interface/HLTHtMhtProducer2.h"
 #include "HLTrigger/JetMET/interface/HLTMhtProducer.h"
 #include "HLTrigger/JetMET/interface/HLTMhtProducer2.h"
+#include "HLTrigger/JetMET/interface/HLTTrackMETProducer.h"
 #include "HLTrigger/JetMET/interface/HLTMinDPhiMETFilter.h"
 
 //Template
@@ -157,6 +158,7 @@ DEFINE_FWK_MODULE(HLTMhtProducer);
 DEFINE_FWK_MODULE(HLTMhtProducer2);
 DEFINE_FWK_MODULE(HLTHtMhtProducer);
 DEFINE_FWK_MODULE(HLTHtMhtProducer2);
+DEFINE_FWK_MODULE(HLTTrackMETProducer);
 DEFINE_FWK_MODULE(HLTMinDPhiMETFilter);
 
 //Templates

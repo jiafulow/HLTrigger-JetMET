@@ -3,10 +3,11 @@
 
 /** \class HLTPFJetIDProducer2
  *
- *  \brief  This applies PF jet ID and produces a jet collection with jets that passed.
+ *  \brief  This applies PFJet ID and produces a jet collection with jets that pass the ID.
  *  \author Michele de Gruttola, Jia Fu Low (Nov 2013)
  *
- *  (Descriptions)
+ *  This receives a PFJet collection, selects jets that pass PFJet ID,
+ *  and makes an output PFJet collection with only jets that pass.
  *
  */
 
@@ -39,7 +40,7 @@ class HLTPFJetIDProducer2 : public edm::EDProducer {
     double NEF_;              ///< neutral EM fraction
     int NCH_;                 ///< number of charged constituents
     int NTOT_;                ///< number of constituents
-    edm::InputTag inputTag_;  ///< input PF jet collection
+    edm::InputTag inputTag_;  ///< input PFJet collection
 
     edm::EDGetTokenT<reco::PFJetCollection> m_thePFJetToken;
 };

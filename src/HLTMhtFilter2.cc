@@ -53,8 +53,7 @@ void HLTMhtFilter2::fillDescriptions(edm::ConfigurationDescriptions & descriptio
 // Make filter decision
 bool HLTMhtFilter2::hltFilter(edm::Event & iEvent, const edm::EventSetup & iSetup, trigger::TriggerFilterObjectWithRefs & filterproduct) const {
 
-    // Create a pointer to the output filter objects
-    std::auto_ptr<reco::METCollection> result(new reco::METCollection());
+    reco::METRef mhtref;
 
     // Create the reference to the output filter objects
     if (saveTags())  filterproduct.addCollectionTag(moduleLabel_);
@@ -75,14 +74,11 @@ bool HLTMhtFilter2::hltFilter(edm::Event & iEvent, const edm::EventSetup & iSetu
         // in term of timing this will not matter much; typically 1 or 2 cut-sets
         // will be checked only
 
-        // Store the object that was cut on and the ref to it
-        if (hmht->size() > 0)  result->push_back(hmht->front());
+        // Store the ref (even if it is not accepted)
+        mhtref = reco::METRef(hmht, 0);
 
-        edm::Ref<reco::METCollection> mhtref(iEvent.getRefBeforePut<reco::METCollection>(), i);  // reference to i-th object
         filterproduct.addObject(trigger::TriggerMHT, mhtref);  // save as TriggerMHT object
     }
-
-    iEvent.put(result);
 
     return accept;
 }

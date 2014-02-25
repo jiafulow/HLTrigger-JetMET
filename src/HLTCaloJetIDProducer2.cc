@@ -20,7 +20,7 @@ HLTCaloJetIDProducer2::HLTCaloJetIDProducer2(const edm::ParameterSet& iConfig) :
   min_N90hits_(iConfig.getParameter<int>("min_N90hits")),
   min_EMF_    (iConfig.getParameter<double>("min_EMF")),
   max_EMF_    (iConfig.getParameter<double>("max_EMF")),
-  inputTag_   (iConfig.getParameter<edm::InputTag>("inputTag")),
+  inputTag_   (iConfig.getParameter<edm::InputTag>("jetsInput")),
   jetIDParams_(iConfig.getParameter<edm::ParameterSet>("JetIDParams")),
   jetIDHelper_(jetIDParams_) {
     m_theCaloJetToken = consumes<reco::CaloJetCollection>(inputTag_);
@@ -35,11 +35,11 @@ HLTCaloJetIDProducer2::~HLTCaloJetIDProducer2() {}
 // Fill descriptions
 void HLTCaloJetIDProducer2::fillDescriptions(edm::ConfigurationDescriptions & descriptions) {
     edm::ParameterSetDescription desc;
-    desc.add<int>("min_N90", 0);
+    desc.add<int>("min_N90", -2);
     desc.add<int>("min_N90hits", 2);
-    desc.add<double>("min_EMF", 0.0001);
+    desc.add<double>("min_EMF", 1e-6);
     desc.add<double>("max_EMF", 999.);
-    desc.add<edm::InputTag>("inputTag", edm::InputTag("hltAntiKT4CaloJets"));
+    desc.add<edm::InputTag>("jetsInput", edm::InputTag("hltAntiKT4CaloJets"));
 
     edm::ParameterSetDescription descNested;
     descNested.add<bool>("useRecHits", true);
@@ -67,7 +67,7 @@ void HLTCaloJetIDProducer2::produce(edm::Event& iEvent, const edm::EventSetup& i
 
         if (!(j->energy() > 0.))  continue;  // skip jets with zero or negative energy
 
-        if (std::abs(j->eta()) > 2.6) {
+        if (std::abs(j->eta()) >= 2.6) {
             pass = true;
 
         } else {

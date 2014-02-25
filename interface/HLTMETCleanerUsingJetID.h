@@ -17,7 +17,6 @@
 #include "FWCore/Framework/interface/EDProducer.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
-#include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 
 #include "DataFormats/METReco/interface/CaloMET.h"
@@ -33,16 +32,20 @@ namespace edm {
 // Class declaration
 class HLTMETCleanerUsingJetID : public edm::EDProducer {
   public:
-    explicit HLTMETCleanerUsingJetID(const edm::ParameterSet&);
-    ~HLTMETCleanerUsingJetID() {};
+    explicit HLTMETCleanerUsingJetID(const edm::ParameterSet & iConfig);
+    ~HLTMETCleanerUsingJetID();
 
     static void fillDescriptions(edm::ConfigurationDescriptions & descriptions);
-    virtual void produce(edm::Event&, const edm::EventSetup&);
+    virtual void produce(edm::Event& iEvent, const edm::EventSetup & iSetup);
 
   private:
+    /// Use pt; otherwise, use et.
     bool            usePt_;
-    bool            excludePFMuons_;  // currently unused, be careful when dealing with PFJets
+
+    /// Minimum pt requirement for jets
     double          minPt_;
+
+    /// Maximum (abs) eta requirement for jets
     double          maxEta_;
 
     /// Input tag for the MET collection
@@ -60,4 +63,3 @@ class HLTMETCleanerUsingJetID : public edm::EDProducer {
 };
 
 #endif  // HLTMETCleanerUsingJetID_h_
-

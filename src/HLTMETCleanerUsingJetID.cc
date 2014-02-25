@@ -1,19 +1,18 @@
-/** \class  HLTMETCleanerUsingJetID
+/** \class HLTMETCleanerUsingJetID
  *
- *  \author Jia Fu Low <jia.fu.low@cern.ch>
+ * See header file for more information.
  *
- *  See header file for more information.
+ *  \author a Jet/MET person
  *
  */
 
 #include "HLTrigger/JetMET/interface/HLTMETCleanerUsingJetID.h"
-#include "DataFormats/Candidate/interface/Candidate.h"
+#include "FWCore/ParameterSet/interface/ConfigurationDescriptions.h"
 
 
 // Constructor
 HLTMETCleanerUsingJetID::HLTMETCleanerUsingJetID(const edm::ParameterSet& iConfig)
       : usePt_         (iConfig.getParameter<bool>("usePt")),
-        excludePFMuons_(iConfig.getParameter<bool>("excludePFMuons")),
         minPt_         (iConfig.getParameter<double>("minPt")),
         maxEta_        (iConfig.getParameter<double>("maxEta")),
         metLabel_      (iConfig.getParameter<edm::InputTag>("metLabel")),
@@ -23,15 +22,17 @@ HLTMETCleanerUsingJetID::HLTMETCleanerUsingJetID(const edm::ParameterSet& iConfi
     m_theJetToken = consumes<reco::CaloJetCollection>(jetsLabel_);
     m_theGoodJetToken = consumes<reco::CaloJetCollection>(goodJetsLabel_);
 
-    // Register your products
-    produces<reco::CaloMETCollection> ();
+    // Register the products
+    produces<reco::CaloMETCollection>();
 }
+
+// Destructor
+HLTMETCleanerUsingJetID::~HLTMETCleanerUsingJetID() {}
 
 // Fill descriptions
 void HLTMETCleanerUsingJetID::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
     edm::ParameterSetDescription desc;
     desc.add<bool>("usePt", false);
-    desc.add<bool>("excludePFMuons", false);
     desc.add<double>("minPt", 20.);
     desc.add<double>("maxEta", 5.);
     desc.add<edm::InputTag>("metLabel", edm::InputTag("hltMet"));
@@ -43,6 +44,7 @@ void HLTMETCleanerUsingJetID::fillDescriptions(edm::ConfigurationDescriptions& d
 // Produce the products
 void HLTMETCleanerUsingJetID::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
+    // Create a pointer to the products
     std::auto_ptr<reco::CaloMETCollection> result(new reco::CaloMETCollection);
 
     edm::Handle<reco::CaloMETCollection> met;
@@ -104,4 +106,3 @@ void HLTMETCleanerUsingJetID::produce(edm::Event& iEvent, const edm::EventSetup&
 
     iEvent.put( result );
 }
-

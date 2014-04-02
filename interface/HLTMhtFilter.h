@@ -3,12 +3,12 @@
 
 /** \class HLTMhtFilter
  *
- *  \brief  This filters events based on HT and MHT produced by HLTHtMhtProducer2
+ *  \brief  This filters events based on MHT produced by HLTMhtProducer
  *  \author Steven Lowette
  *  \author Michele de Gruttola, Jia Fu Low (Nov 2013)
  *
  *  This filter can accept more than one variant of MHT. An event is kept
- *  if at least one satisfies MHT > `minHht_[i]`.
+ *  if at least one satisfies MHT > `minMht_[i]`.
  *
  */
 

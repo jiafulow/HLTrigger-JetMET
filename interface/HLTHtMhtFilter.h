@@ -3,7 +3,7 @@
 
 /** \class HLTHtMhtFilter
  *
- *  \brief  This filters events based on HT and MHT produced by HLTHtMhtProducer2
+ *  \brief  This filters events based on HT and MHT produced by HLTHtMhtProducer
  *  \author Steven Lowette
  *  \author Michele de Gruttola, Jia Fu Low (Nov 2013)
  *

@@ -45,7 +45,7 @@ void HLTMinDPhiMETFilter::fillDescriptions(edm::ConfigurationDescriptions& descr
     desc.add<int>("triggerType", trigger::TriggerJet);
     desc.add<int>("maxNJets", 2);
     desc.add<double>("minPt", 30.);
-    desc.add<double>("maxEta", 2.5);
+    desc.add<double>("maxEta", 2.6);
     desc.add<double>("minDPhi", 0.5);
     desc.add<edm::InputTag>("metLabel", edm::InputTag("hltPFMETProducer"));
     desc.add<edm::InputTag>("calometLabel", edm::InputTag(""));
